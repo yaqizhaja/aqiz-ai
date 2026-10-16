@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#040404">
+<title>AQIZ ai</title>
+<style>
+:root{--ink:#fff;--muted:rgba(255,255,255,.62);--glass:rgba(255,255,255,.065);--glass-strong:rgba(255,255,255,.13);--edge:rgba(255,255,255,.16);--err:#ddd;--font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Roboto,system-ui,sans-serif;--ease:cubic-bezier(.22,1,.36,1)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{height:100%;margin:0}body{font-family:var(--font);color:var(--ink);background:radial-gradient(1200px 700px at 85% -10%,rgba(255,255,255,.09),transparent 60%),radial-gradient(900px 600px at -10% 20%,rgba(180,180,180,.07),transparent 60%),radial-gradient(800px 600px at 60% 110%,rgba(120,120,120,.06),transparent 60%),#040404;overflow:hidden}button,textarea{font:inherit}button{color:inherit}button:focus-visible,textarea:focus-visible{outline:2px solid #fff;outline-offset:3px}#langit{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.app{position:relative;z-index:1;height:100dvh;max-width:800px;margin:0 auto;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top,0px) + 12px) 14px calc(env(safe-area-inset-bottom,0px) + 12px);gap:10px}.glass{background:var(--glass);border:1px solid var(--edge);-webkit-backdrop-filter:blur(28px) saturate(100%);backdrop-filter:blur(28px) saturate(100%);box-shadow:0 10px 40px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.08)}
+header{display:flex;align-items:center;justify-content:space-between;padding:8px 8px 8px 16px;border-radius:22px;flex:none;min-height:56px}.brand{font-size:1.05rem;letter-spacing:.01em;opacity:0;transition:opacity .35s}.brand b{font-weight:750;background:linear-gradient(90deg,#fff,#999);-webkit-background-clip:text;background-clip:text;color:transparent}.brand i{font-style:normal;font-weight:300;color:var(--muted)}body.ada-chat .brand{opacity:1}.header-actions{display:flex;align-items:center;gap:7px}.ikon-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--edge);background:var(--glass-strong);color:var(--ink);cursor:pointer;display:grid;place-items:center;transition:transform .16s var(--ease),background .2s}.ikon-btn:active{transform:scale(.91)}.ikon-btn svg{width:18px;height:18px}
+.history-backdrop{position:fixed;inset:0;z-index:8;background:rgba(0,0,0,.66);opacity:0;visibility:hidden;transition:opacity .23s,visibility .23s}.history-backdrop.open{opacity:1;visibility:visible}.history-panel{position:fixed;z-index:9;top:0;bottom:0;left:0;width:min(350px,89vw);padding:calc(env(safe-area-inset-top,0px) + 18px) 14px calc(env(safe-area-inset-bottom,0px) + 14px);background:rgba(13,13,13,.97);border-right:1px solid var(--edge);-webkit-backdrop-filter:blur(28px);backdrop-filter:blur(28px);transform:translateX(-105%);transition:transform .3s var(--ease);display:flex;flex-direction:column;gap:14px}.history-panel.open{transform:translateX(0)}.history-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.history-title{font-size:1.1rem;font-weight:700}.history-new{width:100%;padding:12px 14px;border:1px solid var(--edge);border-radius:14px;background:var(--glass-strong);cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;transition:background .2s,transform .2s}.history-new:active{transform:scale(.985)}.history-new svg{width:18px;height:18px;flex:none}.history-list{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:7px;overscroll-behavior:contain}.history-empty{color:var(--muted);text-align:center;padding:24px 10px;font-size:.9rem;line-height:1.5}.history-item{border:1px solid transparent;border-radius:14px;padding:9px 8px;display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.035);animation:historyIn .24s var(--ease) both}.history-item.active{background:var(--glass-strong);border-color:var(--edge)}.history-open{flex:1;min-width:0;text-align:left;border:0;background:transparent;cursor:pointer;padding:3px}.history-name{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:.91rem}.history-preview{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;margin-top:5px;color:var(--muted);font-size:.75rem}.history-date{display:block;margin-top:4px;color:rgba(255,255,255,.42);font-size:.7rem}.history-delete{flex:none;width:32px;height:32px;border:0;border-radius:9px;background:transparent;color:var(--muted);cursor:pointer;font-size:1.25rem}.history-delete:active{background:var(--glass-strong)}.history-share{flex:none;width:32px;height:32px;border:0;border-radius:9px;background:transparent;color:var(--muted);cursor:pointer;font-size:1rem}.history-share:active{background:var(--glass-strong)}@keyframes historyIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
+#chat{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:10px;padding:8px 3px 14px;scrollbar-width:none;scroll-behavior:auto;overflow-anchor:none}#chat::-webkit-scrollbar{display:none}.hero{margin:auto;text-align:center;padding:8px 8px 28px;display:flex;flex-direction:column;align-items:center;gap:14px;width:100%;animation:heroIn .55s var(--ease) both}@keyframes heroIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}.judul{font-size:clamp(2.8rem,15vw,4.6rem);line-height:1.05;margin:0;min-height:1.1em;letter-spacing:-.03em}.judul .a{font-weight:760;background:linear-gradient(180deg,#fff 20%,#999 100%);-webkit-background-clip:text;background-clip:text;color:transparent}.judul .b{font-weight:250;color:var(--muted)}.caret{display:inline-block;width:.07em;height:.85em;margin-left:.06em;background:#fff;vertical-align:-.08em;border-radius:2px;box-shadow:0 0 14px rgba(255,255,255,.45);animation:blink 1s steps(1) infinite}@keyframes blink{50%{opacity:0}}.sub{margin:0;color:var(--muted);font-size:1.02rem;max-width:30ch;line-height:1.45}.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:6px;max-width:570px}.chip{font:inherit;font-size:.88rem;color:var(--ink);cursor:pointer;padding:9px 14px;border-radius:999px;border:1px solid var(--edge);background:var(--glass);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);transition:transform .18s var(--ease),background .2s,border-color .2s}.chip:hover{background:var(--glass-strong)}.chip:active{transform:scale(.96)}
+.row{display:flex;width:100%;flex:none}.row.user{justify-content:flex-end}.row.bot{justify-content:flex-start}.bubble{max-width:min(92%,68ch);min-width:0;padding:11px 15px;border-radius:21px;line-height:1.58;font-size:.98rem;white-space:pre-wrap;overflow-wrap:anywhere;animation:messageIn .3s var(--ease) both;transform-origin:bottom left}.row.user .bubble{transform-origin:bottom right;background:linear-gradient(160deg,#3c3c3c,#202020 60%,#111);border:1px solid rgba(255,255,255,.09);border-bottom-right-radius:7px;color:#fff;box-shadow:0 6px 22px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.1)}.row.bot .bubble{background:rgba(255,255,255,.055);border:1px solid var(--edge);border-bottom-left-radius:7px;-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);box-shadow:0 8px 30px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.06)}@keyframes messageIn{from{opacity:0;transform:translateY(10px) scale(.985);filter:blur(2px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}.bubble.error{color:var(--err)}.message-actions{display:flex;gap:6px;margin-top:9px;justify-content:flex-end;flex-wrap:wrap}.message-action{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--edge);border-radius:9px;background:rgba(255,255,255,.055);color:var(--muted);padding:5px 8px;font-size:.72rem;cursor:pointer}.message-action svg{width:13px;height:13px}.message-action:active{background:var(--glass-strong)}.bubble.thinking{min-width:72px;min-height:43px;display:flex;align-items:center;justify-content:flex-start;margin-right:auto}.bubble.answer-enter{animation:answerIn .32s var(--ease) both}@keyframes answerIn{from{opacity:.4;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.code-block{margin:12px 0;border:1px solid rgba(255,255,255,.15);border-radius:13px;overflow:hidden;background:#090909;white-space:normal}.code-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 9px;background:#181818;border-bottom:1px solid rgba(255,255,255,.12)}.code-language{font-size:.72rem;color:#aaa;text-transform:lowercase;overflow:hidden;text-overflow:ellipsis}.copy-code{display:flex;align-items:center;justify-content:center;gap:6px;padding:6px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:#292929;color:#fff;cursor:pointer;font-size:.76rem;white-space:nowrap;transition:background .15s}.copy-code:active{background:#444}.copy-code svg{width:14px;height:14px}.code-block pre{margin:0;padding:12px;overflow-x:auto;max-width:100%;background:#090909;border:0;border-radius:0;white-space:pre;overflow-wrap:normal;font:.84rem/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#eee;tab-size:2}.code-block code{font:inherit;white-space:pre}.bubble code.kecil{font:.88em ui-monospace,Menlo,Consolas,monospace;background:rgba(255,255,255,.14);padding:1px 6px;border-radius:6px}.source-list{display:grid;gap:8px;margin-top:14px;white-space:normal}.source-card{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid var(--edge);border-radius:13px;background:rgba(255,255,255,.045);text-decoration:none!important;color:var(--ink)!important}.source-card:hover{background:rgba(255,255,255,.09)}.source-number{display:grid;place-items:center;flex:none;width:25px;height:25px;border:1px solid var(--edge);border-radius:8px;font-size:.75rem;color:var(--muted)}.source-info{min-width:0;display:grid;gap:4px}.source-title{font-size:.9rem;font-weight:650;line-height:1.35}.source-host{font-size:.73rem;color:var(--muted);overflow-wrap:anywhere}.file-card{display:flex;align-items:center;gap:12px;margin:12px 0;padding:13px;border:1px solid var(--edge);border-radius:15px;background:rgba(255,255,255,.045);white-space:normal}.file-icon{display:grid;place-items:center;flex:none;width:42px;height:42px;border:1px solid var(--edge);border-radius:12px;font-size:.75rem;font-weight:750;letter-spacing:.03em}.file-info{flex:1;min-width:0}.file-name{font-weight:650;overflow-wrap:anywhere}.file-desc{font-size:.78rem;color:var(--muted);margin-top:4px}.file-download{margin-top:9px;padding:8px 12px;border:1px solid var(--edge);border-radius:10px;background:#292929;color:#fff;cursor:pointer}.file-download:disabled{opacity:.55;cursor:wait}.bubble p{margin:0 0 9px}.bubble p:last-child{margin-bottom:0}.bubble ul,.bubble ol{padding-left:22px}.bubble a{color:#fff;text-decoration:underline}.titik{display:inline-flex;gap:5px;padding:6px 2px;align-items:center}.titik span{width:6px;height:6px;border-radius:50%;background:#fff;animation:dot 1.1s infinite ease-in-out;opacity:.45}.titik span:nth-child(2){animation-delay:.15s}.titik span:nth-child(3){animation-delay:.3s}@keyframes dot{0%,60%,100%{transform:translateY(0);opacity:.35}30%{transform:translateY(-5px);opacity:1}}
+.upload-tools{display:flex;align-items:center;gap:8px;margin:0 2px 7px}.attach-btn{width:38px;height:38px;flex:none;display:grid;place-items:center;border:1px solid var(--edge);border-radius:50%;background:var(--glass-strong);color:#fff;cursor:pointer}.attach-btn svg{width:19px;height:19px}.attach-btn:disabled{opacity:.4}.attachments{display:flex;gap:7px;flex-wrap:wrap;max-height:92px;overflow:auto;flex:1}.attachment-chip{display:flex;align-items:center;gap:7px;max-width:100%;padding:6px 8px;border:1px solid var(--edge);border-radius:11px;background:rgba(255,255,255,.07);font-size:.75rem;color:#eee}.attachment-chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:min(52vw,260px)}.attachment-chip button{border:0;background:transparent;color:#aaa;font-size:1rem;cursor:pointer;padding:0 2px}.message-text{white-space:pre-wrap;overflow-wrap:anywhere;min-width:0;flex:0 1 auto}.sent-attachments{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:0;max-width:100%;white-space:normal;flex:0 1 auto}.sent-file{display:flex;align-items:center;gap:9px;min-width:0;max-width:100%;width:min(270px,100%);padding:9px 10px;border:1px solid rgba(255,255,255,.14);border-radius:13px;background:rgba(255,255,255,.065);color:#fff;text-decoration:none}.sent-file-icon{width:36px;height:40px;flex:none;display:grid;place-items:center;border:1px solid rgba(255,255,255,.16);border-radius:8px;background:rgba(255,255,255,.06);font-size:.65rem;font-weight:750;letter-spacing:.02em;color:#eee}.sent-file-info{min-width:0;display:flex;flex-direction:column;gap:4px}.sent-file-name{font-size:.79rem;font-weight:600;overflow-wrap:anywhere;line-height:1.3}.sent-file-size{font-size:.69rem;color:rgba(255,255,255,.58)}.sent-image{display:block;max-width:min(100%,290px);max-height:300px;width:auto;height:auto;object-fit:contain;border-radius:13px;border:1px solid rgba(255,255,255,.15);background:#111}.sent-image-wrap{position:relative;max-width:100%;width:fit-content}.sent-image-name{display:block;margin-top:4px;font-size:.68rem;color:rgba(255,255,255,.62);overflow-wrap:anywhere}.row.user .bubble:has(.sent-attachments){max-width:min(96%,68ch);display:flex;flex-wrap:wrap;align-items:center;gap:8px}.row.user .bubble:has(.sent-attachments) .sent-image{max-width:min(220px,62vw);max-height:240px}.upload-note{font-size:.7rem;color:var(--muted);margin-left:auto;white-space:nowrap}.toast{position:fixed;z-index:20;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 88px);transform:translate(-50%,12px);opacity:0;pointer-events:none;background:#f3f3f3;color:#111;padding:10px 15px;border-radius:999px;font-size:.84rem;box-shadow:0 8px 28px #0008;transition:opacity .2s,transform .2s;max-width:90vw;text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}.composer-wrap{flex:none;position:relative}.composer-hint{font-size:.72rem;color:rgba(255,255,255,.35);text-align:center;margin:0 0 7px;opacity:0;transition:opacity .2s;pointer-events:none}.composer-wrap:focus-within .composer-hint{opacity:1}form{display:flex;align-items:flex-end;gap:8px;padding:7px 7px 7px 18px;border-radius:28px;transition:border-color .2s,box-shadow .2s}form:focus-within{border-color:rgba(255,255,255,.28);box-shadow:0 10px 40px rgba(0,0,0,.35),0 0 0 2px rgba(255,255,255,.025),inset 0 1px 0 rgba(255,255,255,.1)}textarea{flex:1;resize:none;max-height:130px;min-height:26px;align-self:center;font:inherit;font-size:1rem;line-height:1.45;color:var(--ink);background:transparent;border:0;outline:0;padding:7px 0;overflow-y:hidden}textarea::placeholder{color:var(--muted)}#kirim{flex:none;width:40px;height:40px;border-radius:50%;border:0;cursor:pointer;background:linear-gradient(160deg,#fff,#bdbdbd);color:#111;display:grid;place-items:center;box-shadow:0 4px 16px rgba(255,255,255,.12);transition:transform .16s var(--ease),opacity .2s}#kirim svg{width:20px;height:20px}#kirim:active{transform:scale(.9)}#kirim:disabled{opacity:.32;cursor:default;box-shadow:none}#kirim.loading svg{animation:sendPulse 1.1s ease-in-out infinite}@keyframes sendPulse{50%{transform:translateY(-2px);opacity:.55}}
+@media(max-width:480px){.app{padding-left:10px;padding-right:10px;gap:8px}.bubble{max-width:96%;font-size:.96rem;padding:10px 13px}.hero{padding-left:2px;padding-right:2px}.composer-hint{display:none}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+/* Layout obrolan bergaya asisten modern: sederhana, lega, tetap monokrom */
+.app{max-width:960px;padding-left:clamp(12px,3vw,28px);padding-right:clamp(12px,3vw,28px);gap:8px}
+header{background:rgba(4,4,4,.82);border:1px solid rgba(255,255,255,.10);box-shadow:none;border-radius:16px;min-height:50px;padding:5px 8px 5px 14px}
+#chat{width:100%;max-width:790px;margin:0 auto;gap:24px;padding:18px 2px 26px;scroll-padding-bottom:24px}
+.row{width:100%;max-width:790px;margin:0 auto;gap:0}
+.row.user{justify-content:flex-end}
+.row.bot{justify-content:flex-start}
+.bubble{max-width:100%;min-width:0;padding:0;border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;line-height:1.72;font-size:1rem;white-space:pre-wrap;overflow-wrap:anywhere}
+.row.user .bubble{max-width:min(82%,600px);padding:10px 15px;background:#252525!important;border:1px solid rgba(255,255,255,.075)!important;border-radius:22px!important;color:#fff;line-height:1.55}
+.row.bot .bubble{width:100%;max-width:100%;padding:0 2px;color:#f4f4f4}
+.row.bot .bubble.thinking{width:auto;min-width:72px;padding:10px 15px;border:1px solid var(--edge)!important;border-radius:16px!important;background:#171717!important}
+.row.user .bubble:has(.sent-attachments){max-width:min(90%,650px);display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.row.user .bubble:has(.sent-attachments) .message-text{flex:1 1 100%;min-width:0}
+.message-actions{justify-content:flex-start;margin-top:12px}
+.message-action{background:transparent;border-color:transparent;border-radius:8px;padding:6px 8px}
+.message-action:hover{background:rgba(255,255,255,.09);border-color:var(--edge)}
+.source-list{margin-top:18px}
+.composer-wrap{width:100%;max-width:790px;margin:0 auto;padding-top:4px}
+form{gap:9px;padding:9px 10px 9px 15px;border-radius:26px;background:#171717;border:1px solid rgba(255,255,255,.16);box-shadow:0 6px 26px rgba(0,0,0,.28)}
+form:focus-within{background:#191919;border-color:rgba(255,255,255,.28);box-shadow:0 0 0 1px rgba(255,255,255,.04),0 8px 28px rgba(0,0,0,.25)}
+textarea{padding:7px 0;max-height:180px}
+.upload-tools{margin-bottom:5px}
+#kirim{width:38px;height:38px;box-shadow:none}
+.composer-hint{margin-top:8px;margin-bottom:0;font-size:.7rem}
+body.ada-chat .hero{display:none}
+/* Composer: lampiran, input, dan kirim berada dalam satu kolom/komponen */
+.composer-form{display:flex;flex-direction:column;align-items:stretch;gap:0;width:100%;max-width:790px;margin:0 auto;padding:8px;border-radius:26px;background:#171717;border:1px solid rgba(255,255,255,.16);box-shadow:0 6px 26px rgba(0,0,0,.28)}
+.composer-form:focus-within{background:#191919;border-color:rgba(255,255,255,.28);box-shadow:0 0 0 1px rgba(255,255,255,.04),0 8px 28px rgba(0,0,0,.25)}
+.composer-files{display:flex;align-items:flex-start;gap:8px;padding:2px 4px 9px;min-width:0;border-bottom:1px solid rgba(255,255,255,.09);margin-bottom:5px}
+.composer-files[hidden]{display:none}
+.composer-files .attachments{max-height:100px;min-width:0;flex:1;display:flex;flex-wrap:wrap;gap:7px}
+.composer-files .upload-note{font-size:.65rem;margin-left:auto;padding-top:5px;white-space:nowrap}
+.composer-entry{display:flex;align-items:flex-end;gap:9px;min-width:0;width:100%}
+.composer-entry .attach-btn{width:38px;height:38px;margin-bottom:1px;background:transparent;border-color:transparent;color:#d4d4d4}
+.composer-entry .attach-btn:hover{background:rgba(255,255,255,.09);border-color:var(--edge)}
+.composer-entry textarea{min-width:0;max-height:180px;min-height:38px;align-self:flex-end;padding:8px 0;line-height:1.45}
+.composer-entry #kirim{width:38px;height:38px;margin-bottom:1px}
+/* Jawaban bot: hirarki teks, jarak, tabel, dan kode lebih konsisten */
+.row.bot .bubble{font-size:1rem;line-height:1.75;letter-spacing:.002em;color:#f2f2f2}
+.row.bot .bubble strong{font-weight:700;color:#fff}
+.row.bot .bubble a{color:#f4f4f4;text-decoration:underline;text-decoration-color:rgba(255,255,255,.45);text-underline-offset:3px;overflow-wrap:anywhere}
+.row.bot .bubble .code-block{margin:14px 0;border-radius:14px}
+.row.bot .bubble .source-list{margin:16px 0 6px}
+.row.bot .bubble .file-card{margin:14px 0}
+.row.bot .bubble .message-actions{padding-top:2px}
+.row.bot .bubble .md-heading{display:block;font-weight:750;font-size:1.08rem;line-height:1.4;margin:18px 0 7px;color:#fff}
+.row.bot .bubble .md-list-item{display:block;padding-left:2px;margin:3px 0;line-height:1.65}
+.row.bot .bubble .md-list-item .md-bullet{display:inline-block;width:1.2em;color:#aaa}
+.row.user .bubble:has(.sent-attachments){gap:10px;align-items:flex-start}
+.row.user .bubble:has(.sent-attachments) .message-text{flex:1 1 100%;line-height:1.5}
+.row.user .bubble:has(.sent-attachments) .sent-attachments{flex:1 1 100%;display:flex;align-items:flex-start;gap:9px}
+.sent-file{width:min(280px,100%)}
+@media(max-width:600px){.composer-form{padding:7px;border-radius:23px}.composer-entry{gap:5px}.composer-entry .attach-btn{width:36px;height:36px}.composer-files{padding-left:2px;padding-right:2px}.composer-files .upload-note{display:none}.row.bot .bubble{font-size:.97rem;line-height:1.72}.row.bot .bubble .md-heading{font-size:1.04rem;margin-top:16px}}
+@media(max-width:600px){
+ .app{padding-left:12px;padding-right:12px;padding-top:calc(env(safe-area-inset-top,0px) + 8px);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 8px)}
+ #chat{gap:22px;padding:14px 1px 22px}
+ .row.user .bubble{max-width:88%;padding:9px 13px}
+ .row.bot .bubble{font-size:.97rem;line-height:1.7;padding:0 1px}
+ .row.user .bubble:has(.sent-attachments){max-width:94%}
+ form{padding:8px 8px 8px 13px}
+ .mode-row{padding-top:2px!important}
+}
+
+
+/* Structured Markdown output: proper headings, numbered steps, bullets, quotes and responsive tables */
+.row.bot .bubble p{margin:0 0 12px;line-height:1.72}
+.row.bot .bubble p:last-child{margin-bottom:0}
+.row.bot .bubble h1,.row.bot .bubble h2,.row.bot .bubble h3,.row.bot .bubble h4{font-weight:750;line-height:1.35;letter-spacing:-.015em;color:#fff}
+.row.bot .bubble h1{font-size:1.32rem;margin:22px 0 10px}
+.row.bot .bubble h2{font-size:1.2rem;margin:20px 0 9px}
+.row.bot .bubble h3{font-size:1.08rem;margin:17px 0 7px}
+.row.bot .bubble h4{font-size:1rem;margin:15px 0 6px}
+.row.bot .bubble h1:first-child,.row.bot .bubble h2:first-child,.row.bot .bubble h3:first-child{margin-top:0}
+.row.bot .bubble ul,.row.bot .bubble ol{margin:7px 0 15px;padding-left:1.65rem;display:flex;flex-direction:column;gap:6px;line-height:1.7}
+.row.bot .bubble li{padding-left:.18rem;overflow-wrap:anywhere}
+.row.bot .bubble li::marker{color:#bdbdbd;font-weight:650}
+.row.bot .bubble blockquote{margin:12px 0;padding:9px 14px;border-left:3px solid #777;background:rgba(255,255,255,.045);border-radius:0 10px 10px 0;color:#ddd}
+.row.bot .bubble .md-rule{border:0;border-top:1px solid rgba(255,255,255,.16);margin:18px 0}
+.md-table-wrap{max-width:100%;overflow-x:auto;margin:12px 0 16px;border:1px solid rgba(255,255,255,.14);border-radius:12px}
+.md-table{width:100%;border-collapse:collapse;font-size:.88rem;line-height:1.55;white-space:normal}
+.md-table th,.md-table td{padding:9px 11px;text-align:left;vertical-align:top;border-bottom:1px solid rgba(255,255,255,.1);min-width:85px}
+.md-table th{background:rgba(255,255,255,.09);font-weight:700;color:#fff}
+.md-table tr:last-child td{border-bottom:0}
+.row.bot .bubble .md-heading{display:block}
+.row.bot .bubble .md-list-item{display:block}
+@media(max-width:600px){.row.bot .bubble ul,.row.bot .bubble ol{padding-left:1.45rem;gap:5px}.md-table{font-size:.82rem}.md-table th,.md-table td{padding:8px}}
+
+/* ===== Mode Suara (voice popup) ===== */
+.voice-btn{width:38px;height:38px;flex:none;display:grid;place-items:center;border:1px solid var(--edge);border-radius:50%;background:transparent;color:#d4d4d4;cursor:pointer;margin-bottom:1px;transition:background .2s,transform .16s var(--ease)}
+.voice-btn:hover{background:rgba(255,255,255,.09)}
+.voice-btn:active{transform:scale(.92)}
+.voice-btn svg{width:19px;height:19px}
+.voice-overlay{position:fixed;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;padding:calc(env(safe-area-inset-top,0px) + 16px) 16px calc(env(safe-area-inset-bottom,0px) + 16px);background:rgba(3,3,3,.82);-webkit-backdrop-filter:blur(26px);backdrop-filter:blur(26px);opacity:0;visibility:hidden;transition:opacity .28s,visibility .28s}
+.voice-overlay.open{opacity:1;visibility:visible}
+.voice-card{position:relative;width:min(440px,100%);max-height:100%;overflow-y:auto;display:flex;flex-direction:column;align-items:center;gap:16px;padding:26px 20px 20px;border-radius:30px;border:1px solid var(--edge);background:rgba(18,18,18,.92);box-shadow:0 24px 70px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.08);transform:translateY(14px) scale(.98);transition:transform .35s var(--ease)}
+.voice-overlay.open .voice-card{transform:translateY(0) scale(1)}
+.voice-close{position:absolute;top:12px;right:12px}
+.voice-title{font-size:.95rem;font-weight:650;letter-spacing:.01em;color:var(--muted);margin:0}
+.voice-orb-wrap{position:relative;width:170px;height:170px;display:grid;place-items:center;margin:6px 0}
+.voice-orb{position:relative;z-index:2;width:104px;height:104px;border-radius:50%;border:0;cursor:pointer;background:radial-gradient(circle at 32% 28%,#fff,#bdbdbd 45%,#5a5a5a 100%);box-shadow:0 0 40px rgba(255,255,255,.18),inset 0 -8px 18px rgba(0,0,0,.35);transition:transform .25s var(--ease),box-shadow .3s}
+.voice-ring{position:absolute;inset:0;margin:auto;width:104px;height:104px;border-radius:50%;border:1px solid rgba(255,255,255,.4);opacity:0;pointer-events:none}
+.voice-overlay[data-state="listening"] .voice-orb{animation:vPulse 1.6s ease-in-out infinite;box-shadow:0 0 60px rgba(255,255,255,.3),inset 0 -8px 18px rgba(0,0,0,.35)}
+.voice-overlay[data-state="listening"] .voice-ring{animation:vRing 2s ease-out infinite}
+.voice-overlay[data-state="listening"] .voice-ring.r2{animation-delay:.9s}
+.voice-overlay[data-state="thinking"] .voice-orb{animation:vThink 1.1s ease-in-out infinite;background:radial-gradient(circle at 32% 28%,#eee,#888 50%,#333 100%)}
+.voice-overlay[data-state="speaking"] .voice-orb{animation:vSpeak .55s ease-in-out infinite alternate;box-shadow:0 0 70px rgba(255,255,255,.38),inset 0 -8px 18px rgba(0,0,0,.35)}
+.voice-overlay[data-state="speaking"] .voice-ring{animation:vRing 1.2s ease-out infinite}
+.voice-overlay[data-state="speaking"] .voice-ring.r2{animation-delay:.5s}
+.voice-overlay[data-state="muted"] .voice-orb,.voice-overlay[data-state="idle"] .voice-orb{filter:grayscale(1) brightness(.55);box-shadow:none}
+@keyframes vPulse{50%{transform:scale(1.09)}}
+@keyframes vThink{0%,100%{transform:scale(.94);opacity:.75}50%{transform:scale(1.02);opacity:1}}
+@keyframes vSpeak{from{transform:scale(.96)}to{transform:scale(1.14)}}
+@keyframes vRing{0%{transform:scale(1);opacity:.55}100%{transform:scale(1.7);opacity:0}}
+.voice-status{font-size:1.12rem;font-weight:650;margin:0;min-height:1.4em;text-align:center}
+.voice-transcript{margin:0;width:100%;min-height:4.4em;max-height:130px;overflow-y:auto;text-align:center;color:var(--muted);font-size:.95rem;line-height:1.55;overflow-wrap:anywhere}
+.voice-transcript b{color:#fff;font-weight:600}
+.voice-controls{display:flex;gap:12px;align-items:center;justify-content:center}
+.voice-ctl{width:54px;height:54px;border-radius:50%;border:1px solid var(--edge);background:var(--glass-strong);color:#fff;cursor:pointer;display:grid;place-items:center;transition:transform .16s var(--ease),background .2s}
+.voice-ctl:active{transform:scale(.92)}
+.voice-ctl svg{width:22px;height:22px}
+.voice-ctl.active{background:#fff;color:#111}
+.voice-ctl.end{background:#e9e9e9;color:#111}
+.voice-settings{width:100%;display:grid;gap:10px;padding-top:14px;border-top:1px solid rgba(255,255,255,.1)}
+.voice-row{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:.82rem;color:var(--muted)}
+.voice-seg{display:flex;padding:3px;gap:3px;border:1px solid var(--edge);border-radius:12px;background:rgba(255,255,255,.05)}
+.voice-seg button{border:0;border-radius:9px;background:transparent;color:var(--muted);padding:7px 14px;font-size:.83rem;cursor:pointer;transition:background .18s,color .18s}
+.voice-seg button.on{background:#fff;color:#111;font-weight:650}
+.voice-hint{margin:0;font-size:.7rem;color:rgba(255,255,255,.4);text-align:center;line-height:1.5}
+@media(max-width:480px){.voice-card{padding:24px 16px 16px;border-radius:26px}.voice-orb-wrap{width:150px;height:150px}}
+@media(prefers-reduced-motion:reduce){.voice-orb,.voice-ring{animation:none!important}}
+</style>
+</head>
+<body>
+<canvas id="langit" aria-hidden="true"></canvas>
+<div class="history-backdrop" id="historyBackdrop"></div>
+<aside class="history-panel" id="historyPanel" aria-label="Riwayat obrolan" aria-hidden="true">
+  <div class="history-head"><div class="history-title">Riwayat obrolan</div><button type="button" class="ikon-btn" id="closeHistory" aria-label="Tutup riwayat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m18 6-12 12M6 6l12 12"/></svg></button></div>
+  <button type="button" class="history-new" id="newChat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Obrolan baru</button>
+  <div class="history-list" id="historyList"></div>
+</aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div><div class="app">
+  <header class="glass"><div class="brand"><b>AQIZ</b> <i>ai</i></div><div class="header-actions">
+    <button type="button" class="ikon-btn" id="openHistory" aria-label="Riwayat obrolan" title="Riwayat obrolan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg></button>
+    <button type="button" class="ikon-btn" id="shareChat" aria-label="Bagikan obrolan" title="Bagikan obrolan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.7 6.6-4.4M8.7 13.3l6.6 4.4"/></svg></button><button type="button" class="ikon-btn" id="hapus" aria-label="Obrolan baru" title="Obrolan baru"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>
+  </div></header>
+  <main id="chat" aria-live="polite" data-following="true">
+    <section class="hero" id="hero"><h1 class="judul" aria-label="AQIZ ai"><span class="a" id="ja"></span><span class="b" id="jb"></span><span class="caret" id="caret"></span></h1><p class="sub">Tanya apa saja. Aku siap membantu.</p><div class="chips" id="chips"><button class="chip" type="button">Jelaskan hal sulit dengan sederhana</button><button class="chip" type="button">Fakta unik tentang luar angkasa</button><button class="chip" type="button">Ide proyek coding untuk pemula</button><button class="chip" type="button">Bantu aku bikin caption</button></div></section>
+  </main>
+  <div class="composer-wrap"><p class="composer-hint">Enter untuk mengirim · Shift + Enter untuk baris baru</p><div class="mode-row" style="display:flex;gap:7px;justify-content:center;flex-wrap:wrap;padding:0 4px 4px"><label for="modeAQIZ" style="color:rgba(255,255,255,.62);font-size:.78rem;align-self:center">Mode</label><select id="modeAQIZ" aria-label="Mode kerja AI" style="max-width:190px;background:#171717;color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:8px 10px"><option value="Umum">Umum</option><option value="Riset">Riset</option><option value="Coding">Coding</option><option value="Akademik">Akademik</option><option value="Ringkasan">Ringkasan</option><option value="Penulisan">Penulisan</option></select></div>
+<form id="form" class="glass composer-form"><div class="composer-files" id="composerFiles" hidden><div id="attachments" class="attachments" aria-live="polite"></div><span class="upload-note">Maks. 5 file · 20 MB/file</span></div><div class="composer-entry"><button type="button" class="attach-btn" id="attachBtn" aria-label="Upload file" title="Upload file"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.4 11.1-8.9 8.9a6 6 0 0 1-8.5-8.5l9.2-9.2a4 4 0 0 1 5.7 5.7l-9.2 9.2a2 2 0 0 1-2.8-2.8l8.5-8.5"/></svg></button><input id="fileInput" type="file" hidden multiple accept=".pdf,.docx,.txt,.md,.csv,.json,.xlsx,.xls,.pptx,.png,.jpg,.jpeg,.webp,.gif"/><textarea id="input" rows="1" placeholder="Tulis pesan..." aria-label="Pesan"></textarea><button id="kirim" type="submit" aria-label="Kirim" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg></button></div></form></div>
+</div>
+<script>
+// ===== PENGATURAN ASLI =====
+const API_KEY = "AQ.Ab8RN6Kd3rCRQSOYiQsr3OVFlPYKlBSciii_YhUACNb1m5QnRQ";
+const MODELS = ["gemini-3.5-flash-lite"];
+const PETUNJUK = `Kamu adalah AQIZ ai, asisten yang ramah, cerdas, dan solutif. Jawab dalam bahasa pengguna, jelas, langsung, dan praktis.
+
+SUMBER WEB (WAJIB AKURAT):
+1. Jika pertanyaan membutuhkan informasi web, berita, tutorial, jurnal, produk, dokumentasi, situs, aplikasi, atau video, lakukan pencarian Google Search yang tersedia sebelum menjawab.
+2. Gunakan hanya sumber yang benar-benar muncul dari hasil pencarian/grounding. Jangan membuat URL, domain, judul halaman, DOI, judul video, kanal, atau detail bibliografi dari tebakan.
+3. Jangan memberi tautan ke halaman hasil pencarian Google, Bing, YouTube, atau mesin pencari lain sebagai sumber. Prioritaskan halaman artikel/penerbit, situs resmi, dokumentasi, halaman produk, berita, repositori, postingan, atau video YouTube langsung.
+4. Jika sumber yang ditemukan adalah video YouTube, gunakan URL video langsung hanya bila URL itu benar-benar tersedia dari hasil pencarian. Jangan menebak ID video.
+5. Jawaban tetap harus substantif dan langsung. Jangan membuat daftar sumber fiktif. Sumber yang telah ditemukan akan ditampilkan oleh aplikasi sebagai kartu tautan terpisah.
+6. Jangan menulis URL yang tidak kamu peroleh dengan yakin dari hasil pencarian. Jika tidak ada sumber langsung yang terverifikasi, katakan terus terang bahwa sumber langsung belum ditemukan.
+7. Untuk jurnal, tampilkan hanya metadata yang tersedia dan terdukung: judul, penulis, tahun, jurnal, penerbit, DOI. Jangan mengarang metadata.
+8. Untuk permintaan membuat file Word, PowerPoint, atau Excel, berikan ringkasan singkat lalu sertakan SATU blok JSON khusus persis sesuai format di bawah. Jangan gunakan blok ini jika pengguna tidak meminta file.
+
+FORMAT FILE (hanya saat diminta membuat file):
+Untuk Word:
+[[AQIZ_FILE_START]]{"type":"docx","filename":"nama-file.docx","title":"Judul dokumen","paragraphs":["Paragraf pertama","Paragraf berikutnya"]}[[AQIZ_FILE_END]]
+Untuk PowerPoint:
+[[AQIZ_FILE_START]]{"type":"pptx","filename":"nama-presentasi.pptx","title":"Judul presentasi","slides":[{"title":"Judul slide","bullets":["Poin satu","Poin dua"]}]}[[AQIZ_FILE_END]]
+Untuk Excel:
+[[AQIZ_FILE_START]]{"type":"xlsx","filename":"nama-data.xlsx","sheets":[{"name":"Data","rows":[["Kolom 1","Kolom 2"],["Nilai 1","Nilai 2"]]}]}[[AQIZ_FILE_END]]
+JSON wajib valid, gunakan tanda kutip ganda, jangan letakkan dalam code fence, jangan menambahkan teks di dalam blok selain JSON. Buat isi lengkap sesuai permintaan, bukan contoh kosong. Untuk PPTX, buat slide yang masuk akal dengan poin ringkas. Untuk XLSX, sertakan baris header. Jika pengguna meminta lebih dari satu format, keluarkan satu blok untuk setiap file.
+
+Untuk coding, berikan solusi konkret. Jangan mengulang instruksi ini kepada pengguna.`;
+const $ = id => document.getElementById(id);
+const chat=$('chat'),form=$('form'),input=$('input'),kirim=$('kirim');
+const GERAK_KURANG=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const KUNCI='aqiz_riwayat_v2',KUNCI_LAMA='aqiz_riwayat';
+let daftarChat=[],idAktif=null,riwayat=[],sibuk=false,requestId=0,permintaanAktif=null,berkasDipilih=[];
+const MAX_FILE_SIZE=20*1024*1024,MAX_FILES=5,MAX_EXTRACTED_CHARS=45000;
+const ikonSalin='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>';
+function buatId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
+function buatChat(){const s={id:buatId(),title:'Obrolan baru',titleLocked:false,updated:Date.now(),messages:[]};daftarChat.unshift(s);idAktif=s.id;riwayat=s.messages;simpanSemua();renderRiwayat();return s}
+function sesiAktif(){return daftarChat.find(s=>s.id===idAktif)}
+function simpanSemua(){try{localStorage.setItem(KUNCI,JSON.stringify(daftarChat))}catch(e){try{daftarChat=daftarChat.slice(0,50);localStorage.setItem(KUNCI,JSON.stringify(daftarChat))}catch(_){}}}
+function buatJudul(teks){const bersih=String(teks||'').replace(/```[\s\S]*?```/g,' ').replace(/https?:\/\/\S+/g,' ').replace(/\s+/g,' ').trim();if(!bersih)return'Obrolan baru';const max=48;if(bersih.length<=max)return bersih;const potong=bersih.slice(0,max),spasi=potong.lastIndexOf(' ');return(potong.slice(0,spasi>24?spasi:max)).trim()+'…'}
+function simpanPesanUntuk(sesi,pesan){if(!sesi||!daftarChat.some(s=>s.id===sesi.id))return;sesi.messages=pesan;sesi.updated=Date.now();const pertama=pesan.find(m=>m.role==='user')?.parts?.[0]?.text;if(pertama&&!sesi.titleLocked){sesi.title=buatJudul(pertama);sesi.titleLocked=true}daftarChat.sort((a,b)=>(b.updated||0)-(a.updated||0));simpanSemua();renderRiwayat()}
+function simpanPesan(){simpanPesanUntuk(sesiAktif(),riwayat)}
+function tanggalRingkas(ts){const d=new Date(ts),n=new Date();return d.toDateString()===n.toDateString()?d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}):d.toLocaleDateString('id-ID',{day:'numeric',month:'short'})}
+function renderRiwayat(){const list=$('historyList');list.innerHTML='';if(!daftarChat.length){const el=document.createElement('div');el.className='history-empty';el.textContent='Belum ada riwayat obrolan. Mulai percakapan baru untuk menyimpannya di sini.';list.appendChild(el);return}for(const s of daftarChat){const item=document.createElement('div');item.className='history-item'+(s.id===idAktif?' active':'');const buka=document.createElement('button');buka.type='button';buka.className='history-open';const nama=document.createElement('span');nama.className='history-name';nama.textContent=s.title||'Obrolan baru';const preview=document.createElement('span');preview.className='history-preview';const terakhir=[...(s.messages||[])].reverse().find(m=>m.role==='user'||m.role==='model');preview.textContent=terakhir?.parts?.map(p=>p.text||'').join('').replace(/\s+/g,' ').trim().slice(0,72)||'Belum ada pesan';const tanggal=document.createElement('span');tanggal.className='history-date';tanggal.textContent=tanggalRingkas(s.updated||Date.now());buka.append(nama,preview,tanggal);buka.addEventListener('click',()=>bukaChat(s.id));const del=document.createElement('button');del.type='button';del.className='history-delete';del.setAttribute('aria-label','Hapus '+(s.title||'obrolan'));del.title='Hapus riwayat';del.textContent='×';del.addEventListener('click',()=>hapusChat(s.id));const share=document.createElement('button');share.type='button';share.className='history-share';share.title='Bagikan obrolan';share.setAttribute('aria-label','Bagikan '+(s.title||'obrolan'));share.textContent='↗';share.addEventListener('click',()=>bagikanSesi(s));item.append(buka,share,del);list.appendChild(item)}}
+function bukaPanel(){$('historyPanel').classList.add('open');$('historyBackdrop').classList.add('open');$('historyPanel').setAttribute('aria-hidden','false');renderRiwayat()}
+function tutupPanel(){$('historyPanel').classList.remove('open');$('historyBackdrop').classList.remove('open');$('historyPanel').setAttribute('aria-hidden','true')}
+function heroBaru(){const section=document.createElement('section');section.className='hero';section.id='hero';section.innerHTML='<h1 class="judul" aria-label="AQIZ ai"><span class="a">AQIZ</span> <span class="b">ai</span></h1><p class="sub">Tanya apa saja. Aku siap membantu.</p><div class="chips" id="chips"><button class="chip" type="button">Jelaskan hal sulit dengan sederhana</button><button class="chip" type="button">Fakta unik tentang luar angkasa</button><button class="chip" type="button">Ide proyek coding untuk pemula</button><button class="chip" type="button">Bantu aku bikin caption</button></div>';return section}
+function kosongkanLayar(){chat.replaceChildren(heroBaru());chat.dataset.following='true';document.body.classList.remove('ada-chat')}
+function buatBaris(peran,isi,html,animasi=true){document.body.classList.add('ada-chat');const baris=document.createElement('div');baris.className='row '+peran;const el=document.createElement('div');el.className='bubble';if(html)el.innerHTML=isi;else el.textContent=isi;if(!animasi){el.style.animation='none'}baris.appendChild(el);chat.appendChild(baris);ikutiBawahJikaPerlu(true);return el}
+function gelembung(peran,isi,html){return buatBaris(peran,isi,html,true)}
+function teksTampilanPengguna(m){const teks=m.parts?.map(p=>p.text||'').join('')||'';return teks.split(/\n\n\[Lampiran: /)[0].trim()}
+function tampilkanLampiranPesan(bubble,files,previewData){if(!files||!files.length)return;const wrap=document.createElement('div');wrap.className='sent-attachments';for(const f of files){if(f.kind==='image'){const item=document.createElement('div');item.className='sent-image-wrap';const src=previewData&&previewData[f.id]||(f.inlineData&&f.mimeType?'data:'+f.mimeType+';base64,'+f.inlineData:'');if(src){const img=document.createElement('img');img.className='sent-image';img.alt=f.name;img.loading='lazy';img.src=src;img.title=f.name;item.appendChild(img)}else{const card=document.createElement('div');card.className='sent-file';const ico=document.createElement('div');ico.className='sent-file-icon';ico.textContent='IMG';const info=document.createElement('div');info.className='sent-file-info';const name=document.createElement('span');name.className='sent-file-name';name.textContent=f.name;const size=document.createElement('span');size.className='sent-file-size';size.textContent='Gambar · '+ukuranBerkas(f.size||0);info.append(name,size);card.append(ico,info);item.appendChild(card)}const label=document.createElement('span');label.className='sent-image-name';label.textContent=f.name;item.appendChild(label);wrap.appendChild(item)}else{const card=document.createElement('div');card.className='sent-file';const ico=document.createElement('div');ico.className='sent-file-icon';const ext=(f.name.split('.').pop()||'FILE').slice(0,4).toUpperCase();ico.textContent=ext;const info=document.createElement('div');info.className='sent-file-info';const name=document.createElement('span');name.className='sent-file-name';name.textContent=f.name;name.title=f.name;const size=document.createElement('span');size.className='sent-file-size';size.textContent=ukuranBerkas(f.size||0)+' · '+(f.kind==='text'?'Dokumen':'File');info.append(name,size);card.append(ico,info);wrap.appendChild(card)}}bubble.appendChild(wrap)}
+function renderPesanPengguna(m,animasi=false){const teks=teksTampilanPengguna(m);const el=buatBaris('user','',false,animasi);el.replaceChildren();if(teks){const t=document.createElement('div');t.className='message-text';t.textContent=teks;el.appendChild(t)}tampilkanLampiranPesan(el,m.attachments||[]);if(!teks&&!(m.attachments||[]).length)el.textContent='';return el}
+function renderSesi(sesi){kosongkanLayar();riwayat=sesi.messages||[];if(riwayat.length){chat.replaceChildren();document.body.classList.add('ada-chat');for(const m of riwayat){const teks=m.parts?.map(p=>p.text||'').join('')||'';if(m.role==='user')renderPesanPengguna(m,false);else if(m.role==='model'){const el=buatBaris('bot',format(teks),true,false);pastikanAksiJawaban(el)}} }chat.dataset.following='true';turun(false);}
+function batalkanPermintaanAktif(){if(permintaanAktif){permintaanAktif.dibatalkan=true;permintaanAktif=null}requestId++;sibuk=false;kirim.classList.remove('loading');ukurInput()}
+function bukaChat(id){const s=daftarChat.find(x=>x.id===id);if(!s)return;if(id===idAktif){tutupPanel();return}batalkanPermintaanAktif();idAktif=s.id;riwayat=s.messages||[];tutupPanel();renderSesi(s);renderRiwayat()}
+function obrolanBaru(){batalkanPermintaanAktif();tutupPanel();buatChat();riwayat=[];kosongkanLayar();input.value='';ukurInput();input.focus()}
+function hapusChat(id){const i=daftarChat.findIndex(s=>s.id===id);if(i<0)return;const sedangAktif=idAktif===id;daftarChat.splice(i,1);if(sedangAktif){batalkanPermintaanAktif();if(daftarChat.length){idAktif=daftarChat[0].id;riwayat=daftarChat[0].messages||[];renderSesi(daftarChat[0])}else{buatChat();riwayat=[];kosongkanLayar()}}simpanSemua();renderRiwayat()}
+(function ketikJudul(){const penuh='AQIZ ai',ja=$('ja'),jb=$('jb');if(GERAK_KURANG){ja.textContent='AQIZ';jb.textContent=' ai';return}let i=0;setTimeout(function langkah(){i++;ja.textContent=penuh.slice(0,Math.min(i,4));jb.textContent=penuh.slice(4,i);if(i<penuh.length)setTimeout(langkah,130+Math.random()*90)},350)})();
+(function langit(){const c=$('langit'),g=c.getContext('2d');let w,h,dpr,bintang=[],jatuh=[],berikut=0,raf=0;function ukur(){dpr=Math.min(devicePixelRatio||1,1.5);w=innerWidth;h=innerHeight;c.width=w*dpr;c.height=h*dpr;g.setTransform(dpr,0,0,dpr,0,0);const n=Math.min(220,Math.floor(w*h/5200));bintang=Array.from({length:n},()=>({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.2+.25,a:Math.random()*.5+.2,s:Math.random()*1.6+.4,p:Math.random()*6.28}));if(GERAK_KURANG)gambarBintang(0)}function gambarBintang(t){for(const b of bintang){const k=GERAK_KURANG?1:.58+.42*Math.sin(t/1000*b.s+b.p);g.fillStyle='rgba(255,255,255,'+(b.a*k).toFixed(3)+')';g.beginPath();g.arc(b.x,b.y,b.r,0,6.2832);g.fill()}}function lahirkan(){const sudut=(Math.random()*18+22)*Math.PI/180,v=Math.random()*5+7;jatuh.push({x:Math.random()*w*1.1+w*.1,y:-20+Math.random()*h*.25,vx:-Math.cos(sudut)*v,vy:Math.sin(sudut)*v,len:Math.random()*90+90,umur:0,maks:Math.random()*30+45})}function gambarJatuh(){for(let i=jatuh.length-1;i>=0;i--){const s=jatuh[i];s.x+=s.vx;s.y+=s.vy;s.umur++;const f=s.umur/s.maks,a=f<.15?f/.15:Math.max(0,1-(f-.15)/.85),m=Math.hypot(s.vx,s.vy),tx=s.x-s.vx/m*s.len,ty=s.y-s.vy/m*s.len,gr=g.createLinearGradient(s.x,s.y,tx,ty);gr.addColorStop(0,'rgba(255,255,255,'+a+')');gr.addColorStop(.4,'rgba(180,180,180,'+a*.35+')');gr.addColorStop(1,'rgba(180,180,180,0)');g.strokeStyle=gr;g.lineWidth=1.5;g.beginPath();g.moveTo(s.x,s.y);g.lineTo(tx,ty);g.stroke();if(s.umur>=s.maks||s.x<-250||s.y>h+250)jatuh.splice(i,1)}}function bingkai(t){g.clearRect(0,0,w,h);gambarBintang(t);if(t>berikut){if(jatuh.length<2)lahirkan();berikut=t+2200+Math.random()*3500}gambarJatuh();raf=requestAnimationFrame(bingkai)}addEventListener('resize',ukur);ukur();if(!GERAK_KURANG)raf=requestAnimationFrame(bingkai)})();
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+const fileJobs=new Map();let fileJobCounter=0;
+function format(teks){
+ const blocks=[];let t=String(teks).replace(/\n*Catatan: pencarian web gagal pada permintaan ini, jadi saya tidak bisa memberikan tautan jurnal langsung yang terverifikasi\.?/gi,'');const verifiedUris=new Set();
+ const placeholder=html=>{const i=blocks.push(html)-1;return'\u0000block-'+i+'\u0000'};
+ t=t.replace(/\[\[AQIZ_SOURCES\]\]([\s\S]*?)\[\[\/AQIZ_SOURCES\]\]/g,(_,raw)=>{
+  let sources=[];try{sources=JSON.parse(raw)}catch(_){}
+  const valid=(Array.isArray(sources)?sources:[]).filter(x=>x&&typeof x.uri==='string'&&/^https?:\/\//i.test(x.uri)&&!isSearchResultUrl(x.uri));
+  if(!valid.length)return'';
+  valid.forEach(x=>{try{verifiedUris.add(new URL(x.uri).href)}catch(_){}});
+  const cards=valid.slice(0,10).map((x,i)=>{let host='',journal=false;try{const u=new URL(x.uri);host=x.host||u.hostname.replace(/^www\./,'');journal=/(doi\.org|pubmed\.ncbi\.nlm\.nih\.gov|pmc\.ncbi\.nlm\.nih\.gov|sciencedirect\.com|springer\.com|link\.springer\.com|wiley\.com|onlinelibrary\.wiley\.com|tandfonline\.com|sagepub\.com|journals\.sagepub\.com|mdpi\.com|frontiersin\.org|plos\.org|nature\.com|jstor\.org|researchgate\.net|ejournal|journal)/i.test((x.host||'')+u.hostname+u.pathname)}catch(_){}const cta=journal?'Buka artikel/jurnal ↗':'Buka sumber asli ↗';return'<a class="source-card" href="'+esc(x.uri)+'" target="_blank" rel="noopener noreferrer"><span class="source-number">'+(i+1)+'</span><span class="source-info"><span class="source-title">'+esc(x.title||host||'Buka sumber asli')+'</span><span class="source-host">'+esc(host)+' · '+cta+'</span></span></a>'}).join('');
+  return placeholder('<div class="source-list"><strong>Sumber yang ditemukan</strong>'+cards+'</div>');
+ });
+ t=t.replace(/\[\[AQIZ_FILE_START\]\]([\s\S]*?)\[\[AQIZ_FILE_END\]\]/g,(_,raw)=>{
+  let job;try{job=JSON.parse(raw)}catch(_){return'\n[File tidak dapat dibuat karena format data tidak valid.]\n'}
+  if(!job||!['docx','pptx','xlsx'].includes(job.type))return'';
+  const id='filejob-'+(++fileJobCounter)+'-'+Math.random().toString(36).slice(2,8);fileJobs.set(id,job);
+  const ext=job.type.toUpperCase(),name=String(job.filename||('dokumen.'+job.type)).replace(/[\\/:*?"<>|]/g,'_');
+  return placeholder('<div class="file-card"><div class="file-icon">'+esc(ext)+'</div><div class="file-info"><div class="file-name">'+esc(name)+'</div><div class="file-desc">File '+({'docx':'Word','pptx':'PowerPoint','xlsx':'Excel'}[job.type])+' siap dibuat dari isi percakapan.</div><button type="button" class="file-download" data-file-id="'+id+'">Buat &amp; unduh '+esc(ext)+'</button></div></div>');
+ });
+ t=t.replace(/```([^\n`]*)\n?([\s\S]*?)```/g,(_,bahasa,kode)=>{const label=bahasa.trim()||'kode',isi=kode.replace(/\n$/,'');return placeholder('<div class="code-block"><div class="code-head"><span class="code-language">'+esc(label)+'</span><button type="button" class="copy-code">'+ikonSalin+'<span>Salin</span></button></div><pre><code>'+esc(isi)+'</code></pre></div>')});
+ t=t.replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,(_,label,uri)=>{try{const u=new URL(uri);if(verifiedUris.has(u.href)&&!isSearchResultUrl(u.href))return placeholder('<a href="'+esc(u.href)+'" target="_blank" rel="noopener noreferrer">'+esc(label)+'</a>')}catch(_){}return label});
+ // Render Markdown as real block elements so numbered points, bullets, tables and paragraphs
+ // do not collapse into a long string of line breaks.
+ const blockToken=/\u0000block-(\d+)\u0000/g;
+ function inlineMd(raw){
+  const holds=[];raw=String(raw).replace(blockToken,(m,i)=>'@@AQIZBLOCK'+(holds.push(blocks[Number(i)]||'')-1)+'@@');
+  let h=esc(raw);
+  h=h.replace(/`([^`\n]+)`/g,'<code class="kecil">$1</code>')
+    .replace(/\*\*([^*\n]+)\*\*/g,'<strong>$1</strong>')
+    .replace(/__([^_\n]+)__/g,'<strong>$1</strong>')
+    .replace(/\*([^*\n]+)\*/g,'<em>$1</em>')
+    .replace(/(^|[\s(])_(?!_)([^_\n]+)_(?=$|[\s).,!?])/g,'$1<em>$2</em>')
+    .replace(/(https?:\/\/[^\s<]+[^\s<.,;:!?])/g,'<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+  h=h.replace(/@@AQIZBLOCK(\d+)@@/g,(_,i)=>holds[Number(i)]||'');return h;
+ }
+ function renderMarkdown(raw){
+  const lines=String(raw).replace(/\r\n?/g,'\n').split('\n'),out=[];let para=[],listType=null,listItems=[],quote=[];
+  const flushPara=()=>{if(para.length){out.push('<p>'+para.map(x=>inlineMd(x)).join('<br>')+'</p>');para=[]}};
+  const flushList=()=>{if(listType){out.push('<'+listType+'>'+listItems.map(x=>'<li>'+inlineMd(x)+'</li>').join('')+'</'+listType+'>');listType=null;listItems=[]}};
+  const flushQuote=()=>{if(quote.length){out.push('<blockquote>'+renderMarkdown(quote.join('\n'))+'</blockquote>');quote=[]}};
+  const isBlockToken=x=>/^\s*\u0000block-\d+\u0000\s*$/.test(x);
+  const isSpecial=x=>!x.trim()||/^\s{0,3}#{1,6}\s+/.test(x)||/^\s*([-*_])(?:\s*\1){2,}\s*$/.test(x)||/^\s*>/.test(x)||/^\s*(?:[-+*])\s+/.test(x)||/^\s*\d+[.)]\s+/.test(x)||isBlockToken(x)||(/^\s*\|?.+\|.+\|?\s*$/.test(x)&&/^\s*\|?\s*:?-{3,}/.test(lines[lines.indexOf(x)+1]||''));
+  for(let i=0;i<lines.length;i++){
+   const line=lines[i],trim=line.trim();
+   if(!trim){flushPara();flushList();flushQuote();continue}
+   if(isBlockToken(line)){flushPara();flushList();flushQuote();out.push(line.replace(blockToken,(_,n)=>blocks[Number(n)]||''));continue}
+   if(/^\s*([-*_])(?:\s*\1){2,}\s*$/.test(line)){flushPara();flushList();flushQuote();out.push('<hr class="md-rule">');continue}
+   const hm=line.match(/^\s{0,3}(#{1,6})\s+(.+?)\s*#*\s*$/);if(hm){flushPara();flushList();flushQuote();const level=Math.min(hm[1].length,4);out.push('<h'+level+' class="md-heading md-h'+level+'">'+inlineMd(hm[2])+'</h'+level+'>');continue}
+   const qm=line.match(/^\s*>\s?(.*)$/);if(qm){flushPara();flushList();quote.push(qm[1]);continue}else flushQuote();
+   // GitHub-style Markdown table
+   if(i+1<lines.length&&/^\s*\|?\s*:?-{3,}/.test(lines[i+1])&&line.includes('|')){
+    flushPara();flushList();const cells=x=>x.trim().replace(/^\|/,'').replace(/\|$/,'').split('|').map(c=>c.trim());const heads=cells(line);i++;const align=cells(lines[i]);let html='<div class="md-table-wrap"><table class="md-table"><thead><tr>'+heads.map((c,j)=>'<th>'+inlineMd(c)+'</th>').join('')+'</tr></thead><tbody>';
+    while(i+1<lines.length&&lines[i+1].includes('|')&&lines[i+1].trim()&&!/^\s*>/.test(lines[i+1])){i++;const row=cells(lines[i]);if(/^\s*\|?\s*:?-{3,}/.test(lines[i]))continue;html+='<tr>'+heads.map((_,j)=>'<td>'+inlineMd(row[j]||'')+'</td>').join('')+'</tr>'}html+='</tbody></table></div>';out.push(html);continue;
+   }
+   const ul=line.match(/^\s*[-+*]\s+(.+)$/),ol=line.match(/^\s*\d+[.)]\s+(.+)$/);
+   if(ul||ol){flushPara();const typ=ul?'ul':'ol';if(listType&&listType!==typ)flushList();if(!listType)listType=typ;listItems.push((ul||ol)[1]);continue}
+   flushList();para.push(line);
+  }
+  flushPara();flushList();flushQuote();return out.join('');
+ }
+ t=renderMarkdown(t);t=t.replace(blockToken,(_,i)=>blocks[Number(i)]||'');return t;
+}
+function isSearchResultUrl(uri){try{const u=new URL(uri),h=u.hostname.toLowerCase().replace(/^www\./,'');const p=u.pathname.toLowerCase();if((h==='google.com'||h.endsWith('.google.com')||h==='google.co.id'||h.endsWith('.google.co.id'))&&(/\/search\/?$/.test(p)||p==='/'))return true;if((h==='bing.com'||h.endsWith('.bing.com'))&&/\/search\/?$/.test(p))return true;if((h==='duckduckgo.com'||h.endsWith('.duckduckgo.com'))&&(p==='/'||p==='/html/')&&(u.searchParams.has('q')||u.searchParams.has('query')))return true;if((h==='youtube.com'||h==='m.youtube.com')&&p==='/results')return true;if(h==='search.yahoo.com')return true;return false}catch(_){return true}}
+async function salinTeks(teks){
+  // Coba Clipboard API lebih dulu; jika ditolak (misalnya file:// atau WebView), lanjut ke fallback.
+  try{if(navigator.clipboard&&typeof navigator.clipboard.writeText==='function'){await navigator.clipboard.writeText(teks);return true}}catch(_){}
+  const a=document.createElement('textarea');a.value=teks;a.setAttribute('readonly','');a.setAttribute('aria-hidden','true');a.style.position='fixed';a.style.top='0';a.style.left='0';a.style.width='2px';a.style.height='2px';a.style.padding='0';a.style.border='0';a.style.opacity='0.01';a.style.fontSize='16px';document.body.appendChild(a);
+  let ok=false;try{a.focus({preventScroll:true});a.select();a.setSelectionRange(0,a.value.length);ok=document.execCommand('copy')}catch(_){}a.remove();
+  if(ok)return true;
+  // Fallback terakhir: tampilkan teks agar pengguna tetap bisa menyalin secara manual.
+  window.prompt('Salin kode berikut:',teks);return false;
+}
+async function muatScript(url,cek){if(cek())return;const urls=[url];if(url.includes('cdn.jsdelivr.net/npm/'))urls.push(url.replace('https://cdn.jsdelivr.net/npm/','https://unpkg.com/'));let lastError;for(const src of urls){if(cek())return;try{await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src;s.async=true;s.onload=resolve;s.onerror=()=>{s.remove();reject(Error('Gagal memuat '+new URL(src).hostname))};document.head.appendChild(s)});if(cek())return;lastError=Error('Pustaka dimuat tetapi tidak tersedia.')}catch(e){lastError=e}}throw Error('Pustaka pembuat file tidak dapat dimuat. Periksa koneksi internet atau izinkan CDN. '+(lastError?.message||''))}
+function namaFileAman(nama,ext){let n=String(nama||'dokumen').trim().replace(/[\\/:*?"<>|]/g,'_');if(!n)n='dokumen';if(!n.toLowerCase().endsWith('.'+ext))n+='.'+ext;return n}
+function unduhBlob(blob,nama){if(!(blob instanceof Blob)||blob.size===0)throw Error('File yang dihasilkan kosong. Coba buat ulang.');const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=nama;a.rel='noopener';a.style.display='none';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),60000)}
+async function buatFile(job){
+ if(job.type==='docx'){
+  await muatScript('https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js',()=>!!window.docx);
+  const {Document,Paragraph,TextRun,HeadingLevel,Packer}=window.docx;
+  const pars=[];if(job.title)pars.push(new Paragraph({text:String(job.title),heading:HeadingLevel.TITLE,spacing:{after:260}}));
+  for(const line of (Array.isArray(job.paragraphs)?job.paragraphs:[])){const str=String(line??'');if(/^#{1,3}\s/.test(str)){const lvl=(str.match(/^#+/)[0].length);pars.push(new Paragraph({text:str.replace(/^#{1,3}\s*/,''),heading:lvl===1?HeadingLevel.HEADING_1:lvl===2?HeadingLevel.HEADING_2:HeadingLevel.HEADING_3,spacing:{before:180,after:100}}))}else if(/^[-*]\s/.test(str)){pars.push(new Paragraph({text:str.replace(/^[-*]\s*/,''),bullet:{indent:360},spacing:{after:80}}))}else{pars.push(new Paragraph({children:[new TextRun(str)],spacing:{after:130}}))}}
+  const doc=new Document({sections:[{properties:{},children:pars.length?pars:[new Paragraph('Dokumen AQIZ AI')]}]});unduhBlob(await Packer.toBlob(doc),namaFileAman(job.filename,'docx'));return;
+ }
+ if(job.type==='pptx'){
+  await muatScript('https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js',()=>!!(window.pptxgen||window.PptxGenJS));
+  const PptxCtor=window.pptxgen||window.PptxGenJS;const pptx=new PptxCtor();pptx.layout='LAYOUT_WIDE';pptx.author='AQIZ AI';pptx.subject=String(job.title||'Presentasi');pptx.title=String(job.title||'Presentasi');pptx.theme={headFontFace:'Aptos Display',bodyFontFace:'Aptos',lang:'id-ID'};
+  const slides=Array.isArray(job.slides)?job.slides:[];for(let i=0;i<Math.max(1,slides.length);i++){const data=slides[i]||{title:job.title||'Presentasi',bullets:[]},sl=pptx.addSlide();sl.background={color:'101010'};sl.addText(String(data.title||job.title||('Slide '+(i+1))),{x:.65,y:.55,w:12,h:1.05,fontFace:'Aptos Display',fontSize:i===0?30:26,bold:true,color:'FFFFFF',margin:0,breakLine:false});const bullets=Array.isArray(data.bullets)?data.bullets:[];if(bullets.length){sl.addText(bullets.map(v=>({text:String(v),options:{bullet:{indent:18},breakLine:true}})),{x:.9,y:1.9,w:11.4,h:4.7,fontFace:'Aptos',fontSize:19,color:'EAEAEA',paraSpaceAfterPt:14,breakLine:false,fit:'shrink'});}sl.addText('AQIZ AI  •  '+(i+1)+' / '+Math.max(1,slides.length),{x:.65,y:7.05,w:12,h:.2,fontSize:9,color:'888888',margin:0});}
+  await pptx.writeFile({fileName:namaFileAman(job.filename,'pptx')});return;
+ }
+ if(job.type==='xlsx'){
+  await muatScript('https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js',()=>!!window.XLSX);
+  const wb=window.XLSX.utils.book_new(),sheets=Array.isArray(job.sheets)?job.sheets:[];for(let i=0;i<Math.max(1,sheets.length);i++){const sh=sheets[i]||{name:'Data',rows:[['Data']]};const rows=Array.isArray(sh.rows)?sh.rows:[['Data']];const ws=window.XLSX.utils.aoa_to_sheet(rows);if(rows[0]?.length)ws['!cols']=rows[0].map((_,col)=>({wch:Math.min(40,Math.max(12,...rows.slice(0,80).map(r=>String(r?.[col]??'').length+2)))}));window.XLSX.utils.book_append_sheet(wb,ws,String(sh.name||('Sheet'+(i+1))).slice(0,31)||'Data')};window.XLSX.writeFile(wb,namaFileAman(job.filename,'xlsx'));return;
+ }
+ throw Error('Format file belum didukung.');
+}
+
+function beriTahu(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(beriTahu.timer);beriTahu.timer=setTimeout(()=>t.classList.remove('show'),2300)}
+function teksBersihPesan(m){let t=(m?.parts||[]).map(p=>p.text||'').join('');return t.replace(/\[\[AQIZ_SOURCES\]\][\s\S]*?\[\[\/AQIZ_SOURCES\]\]/g,'').replace(/\[\[AQIZ_FILE_START\]\][\s\S]*?\[\[AQIZ_FILE_END\]\]/g,'[Lampiran file]')}
+function transkrip(s){return (s?.messages||[]).map(m=>(m.role==='user'?'Kamu':'AQIZ ai')+':\n'+teksBersihPesan(m)).join('\n\n')}
+function toBase64Url(str){const bytes=new TextEncoder().encode(str);let bin='';for(const b of bytes)bin+=String.fromCharCode(b);return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function fromBase64Url(str){const bin=atob(str.replace(/-/g,'+').replace(/_/g,'/'));const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));return new TextDecoder().decode(bytes)}
+async function bagikanSesi(s){
+ if(!s||!s.messages?.length){beriTahu('Belum ada pesan untuk dibagikan.');return}
+ const payload={title:s.title||'Obrolan AQIZ ai',messages:s.messages.map(m=>({role:m.role,parts:(m.parts||[]).map(p=>({text:p.text||''}))}))};
+ const url=new URL(location.href);url.hash='share='+toBase64Url(JSON.stringify(payload));
+ // Tautan berbasis halaman ini; penerima harus dapat membuka halaman yang sama secara online.
+ if(url.href.length>60000){await salinTeks(transkrip(s));beriTahu('Obrolan terlalu panjang untuk tautan. Transkrip disalin.');return}
+ try{if(navigator.share){await navigator.share({title:payload.title,text:'Obrolan dari AQIZ ai',url:url.href});return}}catch(e){if(e?.name==='AbortError')return}
+ const ok=await salinTeks(url.href);beriTahu(ok?'Tautan obrolan disalin.':'Salin tautan dari dialog yang muncul.')
+}
+async function imporTautanBagikan(){
+ const match=location.hash.match(/^#share=(.+)$/);if(!match)return;
+ try{const p=JSON.parse(fromBase64Url(match[1]));if(!p||!Array.isArray(p.messages))return;
+ const sess={id:buatId(),title:buatJudul(p.title||'Obrolan dibagikan'),titleLocked:true,updated:Date.now(),messages:p.messages.filter(m=>m&&['user','model'].includes(m.role)&&Array.isArray(m.parts)).map(m=>({role:m.role,parts:m.parts.map(x=>({text:String(x.text||'')}))}))};
+ if(!sess.messages.length)return;daftarChat.unshift(sess);idAktif=sess.id;riwayat=sess.messages;simpanSemua();renderRiwayat();renderSesi(sess);history.replaceState(null,'',location.pathname+location.search);beriTahu('Obrolan yang dibagikan berhasil dibuka.')
+ }catch(_){beriTahu('Tautan obrolan tidak valid atau rusak.')}
+}
+
+chat.addEventListener('click',async e=>{
+ const answerButton=e.target.closest('.copy-answer');if(answerButton){const bubble=answerButton.closest('.bubble');if(!bubble)return;const clone=bubble.cloneNode(true);clone.querySelectorAll('.message-actions').forEach(x=>x.remove());const label=answerButton.querySelector('span');const awal=label?.textContent||'Salin jawaban';try{const berhasil=await salinTeks(clone.innerText||clone.textContent||'');if(label)label.textContent=berhasil?'Tersalin!':'Salin manual'}catch(_){if(label)label.textContent='Gagal menyalin'}setTimeout(()=>{if(label?.isConnected)label.textContent=awal},1800);return}
+ const fileButton=e.target.closest('.file-download');if(fileButton){const id=fileButton.dataset.fileId,job=fileJobs.get(id);if(!job){beriTahu('Data file tidak ditemukan. Minta AI membuat file lagi.');return}const label=fileButton.textContent;fileButton.disabled=true;fileButton.textContent='Menyiapkan file…';try{await buatFile(job);fileButton.textContent='File dikirim ke unduhan ✓';beriTahu('Pembuatan file selesai. Periksa folder Unduhan/Downloads.')}catch(err){fileButton.textContent='Gagal — coba lagi';const msg=err?.message||String(err)||'Kesalahan tidak diketahui';beriTahu('File gagal dibuat: '+msg);console.error('AQIZ file error:',err)}finally{fileButton.disabled=false;setTimeout(()=>{if(fileButton.isConnected)fileButton.textContent=label},4500)}return}
+ const b=e.target.closest('.copy-code');if(!b)return;const kode=b.closest('.code-block')?.querySelector('pre code')?.textContent;if(kode==null)return;const label=b.querySelector('span'),awal=label.textContent;b.disabled=true;try{const berhasil=await salinTeks(kode);label.textContent=berhasil?'Tersalin!':'Salin manual';b.setAttribute('aria-label',berhasil?'Kode berhasil disalin':'Pilih dan salin kode dari dialog')}catch(_){label.textContent='Coba salin lagi'}finally{b.disabled=false}setTimeout(()=>{if(label.isConnected)label.textContent=awal;b.setAttribute('aria-label','Salin kode')},2200)
+});
+function dekatBawah(){return chat.scrollHeight-chat.scrollTop-chat.clientHeight<125}
+function ikutiBawahJikaPerlu(paksa=false){if(paksa||chat.dataset.following!=='false')requestAnimationFrame(()=>{chat.scrollTop=chat.scrollHeight})}
+function turun(paksa=true){if(paksa)chat.dataset.following='true';requestAnimationFrame(()=>{chat.scrollTop=chat.scrollHeight})}
+chat.addEventListener('scroll',()=>{chat.dataset.following=dekatBawah()?'true':'false'});
+function tunggu(ms){return new Promise(r=>setTimeout(r,ms))}
+function pastikanAksiJawaban(el){if(!el||el.querySelector('.message-actions'))return;const actions=document.createElement('div');actions.className='message-actions';const copy=document.createElement('button');copy.type='button';copy.className='message-action copy-answer';copy.innerHTML=ikonSalin+'<span>Salin jawaban</span>';actions.appendChild(copy);el.appendChild(actions)}
+async function tampilkanJawaban(el,teks,masihAktif){el.classList.remove('thinking');el.classList.add('answer-enter');if(GERAK_KURANG||teks.length>5500){el.innerHTML=format(teks);pastikanAksiJawaban(el);ikutiBawahJikaPerlu();return}el.textContent='';const n=teks.length,langkah=n>2200?20:n>900?11:n>250?5:2,jeda=n>1800?7:n>700?10:14;for(let i=0;i<n;i+=langkah){if(!masihAktif())return;el.textContent=teks.slice(0,Math.min(i+langkah,n));ikutiBawahJikaPerlu();await tunggu(jeda)}if(!masihAktif())return;el.innerHTML=format(teks);pastikanAksiJawaban(el);el.classList.add('answer-enter');ikutiBawahJikaPerlu()}
+function bersihModel(t){return String(t||'').replace(/\[\[AQIZ_SOURCES\]\][\s\S]*?\[\[\/AQIZ_SOURCES\]\]/g,'').replace(/\n*Pencarian web tidak mengembalikan tautan sumber[^\n]*/gi,'').replace(/\n*\[Lampiran file\]/g,'').trim()}
+const RE_MINTA_SUMBER=/sumber|link|tautan|url|referensi|source|jurnal|dari mana|situs|website|berita|artikel|video|youtube|buktikan|asli/i;
+async function panggil(model,requestRiwayatAsli,pakaiSearch=true,ulang=false){
+ // Bersihkan blok sumber/URL redirect dari riwayat agar model tidak bingung, lalu paksa pencarian bila pengguna meminta sumber.
+ let requestRiwayat=requestRiwayatAsli.map(m=>({role:m.role,parts:(m.parts||[]).map(p=>(typeof p.text==='string')?{text:m.role==='model'?bersihModel(p.text):p.text}:p)}));
+ const terakhirTeks=String(requestRiwayat[requestRiwayat.length-1]?.parts?.[0]?.text||'');
+ const mintaSumber=pakaiSearch&&RE_MINTA_SUMBER.test(terakhirTeks);
+ if(mintaSumber){const idx=requestRiwayat.length-1,p0=requestRiwayat[idx].parts[0];let topik='';for(let i=idx-1;i>=0;i--){if(requestRiwayat[i].role==='user'){topik=String(requestRiwayat[i].parts?.[0]?.text||'').slice(0,300);break}}requestRiwayat[idx]={role:'user',parts:[{text:p0.text+'\n\n[Instruksi sistem: pengguna meminta sumber/tautan. WAJIB jalankan Google Search sekarang (jangan hanya mengandalkan jawaban sebelumnya)'+(topik?' untuk topik: "'+topik.replace(/"/g,"'")+'"':'')+(ulang?'. Cari dengan kata kunci yang berbeda dan spesifik':'')+'. Jawab ringkas dan sebutkan nama sumber yang benar-benar ditemukan; tautan akan ditampilkan otomatis sebagai kartu.]'},...requestRiwayat[idx].parts.slice(1)]}}
+ const url='https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent';
+ const mode=document.getElementById('modeAQIZ')?.value||'Umum';const modeInstruksi=({Riset:'Mode Riset: cari sumber nyata, prioritaskan situs resmi, artikel ilmiah, dan dokumentasi primer. Pisahkan fakta, interpretasi, dan ketidakpastian.',Coding:'Mode Coding: berikan solusi kode yang dapat dijalankan, jelaskan lokasi perubahan, dan hindari menghapus fungsi lama yang tidak diminta.',Akademik:'Mode Akademik: gunakan bahasa formal, struktur logis, dan jangan mengarang kutipan atau daftar pustaka.',Ringkasan:'Mode Ringkasan: utamakan inti informasi, ringkas dan terstruktur tanpa menghilangkan poin penting.',Penulisan:'Mode Penulisan: hasilkan tulisan siap pakai sesuai tujuan dan gaya yang diminta.'})[mode]||'';const body={system_instruction:{parts:[{text:PETUNJUK+'\n\n'+modeInstruksi+(window.AQIZ_SUARA_AKTIF?'\n\nMODE SUARA AKTIF: Pengguna berbicara lewat suara dan jawabanmu akan DIBACAKAN dengan suara. Jawab singkat, natural, dan santai seperti mengobrol (maksimal 2 kalimat pendek kecuali diminta detail). Jangan gunakan tabel, emoji, markdown berat, atau daftar panjang.':'')}]},contents:requestRiwayat};if(pakaiSearch)body.tools=[{google_search:{}}];
+ const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':API_KEY},body:JSON.stringify(body)});const data=await res.json().catch(()=>({}));
+ if(!res.ok){const err=Error(data.error?.message||('HTTP '+res.status));err.status=res.status;err.apiMessage=data.error?.message||'';throw err}
+ const kandidat=data.candidates?.[0];let teks=kandidat?.content?.parts?.map(p=>p.text||'').join('');if(!teks){const err=Error('AI tidak memberikan jawaban.');err.status=0;throw err}
+ const sumber=[],seen=new Set();for(const c of (kandidat?.groundingMetadata?.groundingChunks||[])){const w=c?.web;if(!w?.uri||!/^https?:\/\//i.test(w.uri)||isSearchResultUrl(w.uri))continue;let uri;try{uri=new URL(w.uri).href}catch(_){continue}if(seen.has(uri))continue;seen.add(uri);const judulW=String(w.title||'').trim();sumber.push({title:judulW||new URL(uri).hostname,uri,host:/^[a-z0-9.-]+\.[a-z]{2,}$/i.test(judulW)?judulW.replace(/^www\./,''):''})}
+ if(pakaiSearch&&!sumber.length&&mintaSumber&&!ulang)return panggil(model,requestRiwayatAsli,true,true);
+ // Link grounding Gemini berupa redirect (vertexaisearch); coba ambil URL asli, bila diblokir CORS tetap pakai redirect (tetap membuka halaman asli).
+ await Promise.all(sumber.map(async x=>{try{if(!/vertexaisearch\.cloud\.google\.com$/i.test(new URL(x.uri).hostname))return;const c=new AbortController(),tm=setTimeout(()=>c.abort(),3500);const r=await fetch(x.uri,{method:'HEAD',redirect:'follow',signal:c.signal});clearTimeout(tm);if(r&&r.url&&!/vertexaisearch\.cloud\.google\.com$/i.test(new URL(r.url).hostname)&&!isSearchResultUrl(r.url)){x.uri=new URL(r.url).href;try{x.host=new URL(x.uri).hostname.replace(/^www\./,'')}catch(_){}}}catch(_){}}));
+ // Pertahankan tautan Markdown hanya bila URL persis cocok dengan grounding Google Search.
+ const verified=new Set(sumber.map(x=>{try{return new URL(x.uri).href}catch(_){return ''}})),inlineLinks=[];
+ teks=teks.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,(_,label,uri)=>{try{const u=new URL(uri);if(pakaiSearch&&verified.has(u.href)&&!isSearchResultUrl(u.href)){const token='AQIZINLINE'+inlineLinks.length+'TOKEN';inlineLinks.push('['+label+']('+u.href+')');return token}return label+' (tautan langsung tidak terverifikasi)'}catch(_){return label+' (tautan tidak valid)'}});
+ teks=teks.replace(/https?:\/\/[^\s<>"'`]+/gi,'').replace(/[ \t]+\n/g,'\n').replace(/\n{3,}/g,'\n\n').trim();
+ teks=teks.replace(/AQIZINLINE(\d+)TOKEN/g,(_,i)=>inlineLinks[Number(i)]||'');
+ if(pakaiSearch){if(sumber.length){teks+='\n\n[[AQIZ_SOURCES]]'+JSON.stringify(sumber.slice(0,10))+'[[/AQIZ_SOURCES]]'}else{teks+='\n\nPencarian web tidak mengembalikan tautan sumber yang bisa ditampilkan untuk jawaban ini. Saya tidak akan mengarang URL.'}}
+ return teks;
+}
+async function tanya(requestRiwayat){
+ try{return await panggil(MODELS[0],requestRiwayat,(!window.AQIZ_SUARA_AKTIF||/berita|terbaru|terkini|hari ini|harga|cuaca|skor|kurs|sekarang|latest|news|today|price|weather/i.test(String(requestRiwayat[requestRiwayat.length-1]?.parts?.[0]?.text||''))))}catch(errSearch){
+  if(errSearch instanceof TypeError)throw Error('Tidak ada koneksi internet. Pencarian sumber dan pembuatan tautan langsung memerlukan koneksi aktif.');
+  if(![400,403,404,429].includes(errSearch.status))throw Error(errSearch.apiMessage||errSearch.message||'Permintaan Gemini gagal.');
+  try{return await panggil(MODELS[0],requestRiwayat,false)}catch(errBiasa){if(errBiasa instanceof TypeError)throw Error('Tidak ada koneksi internet.');const detail=errBiasa.apiMessage||errBiasa.message||('HTTP '+errBiasa.status);if(errBiasa.status===429)throw Error('API membatasi permintaan. Coba beberapa saat lagi. Detail: '+detail);if(errBiasa.status===403)throw Error('Akses API ditolak. Periksa izin API key dan proyek. Detail: '+detail);throw Error('Permintaan Gemini gagal. '+detail)}
+ }
+}
+function ukuranBerkas(n){if(n<1024)return n+' B';if(n<1048576)return (n/1024).toFixed(1)+' KB';return (n/1048576).toFixed(1)+' MB'}
+function gambarFile(file){return /^image\/(png|jpeg|webp|gif)$/i.test(file.type)||/\.(png|jpe?g|webp|gif)$/i.test(file.name)}
+function bacaFile(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(Error('Gagal membaca '+file.name));r.readAsArrayBuffer(file)})}
+async function skenarioTeks(file,buffer){const ext=file.name.split('.').pop().toLowerCase();const decoder=new TextDecoder('utf-8');
+ if(['txt','md','csv','json'].includes(ext))return decoder.decode(buffer).slice(0,MAX_EXTRACTED_CHARS);
+ if(ext==='pdf'){await muatScript('https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js',()=>!!window.pdfjsLib);window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';const pdf=await window.pdfjsLib.getDocument({data:new Uint8Array(buffer)}).promise;let out='';for(let i=1;i<=Math.min(pdf.numPages,100);i++){const page=await pdf.getPage(i),content=await page.getTextContent();out+='\n[Halaman '+i+']\n'+content.items.map(x=>x.str||'').join(' ');if(out.length>=MAX_EXTRACTED_CHARS)break}return out.slice(0,MAX_EXTRACTED_CHARS)||'[PDF tidak memiliki teks yang bisa diekstrak; mungkin berupa hasil scan.]'}
+ if(ext==='docx'){await muatScript('https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js',()=>!!window.mammoth);const result=await window.mammoth.extractRawText({arrayBuffer:buffer});return String(result.value||'').slice(0,MAX_EXTRACTED_CHARS)}
+ if(['xlsx','xls'].includes(ext)){await muatScript('https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js',()=>!!window.XLSX);const wb=window.XLSX.read(buffer,{type:'array'});return wb.SheetNames.map(name=>'[Sheet: '+name+']\n'+window.XLSX.utils.sheet_to_csv(wb.Sheets[name])).join('\n\n').slice(0,MAX_EXTRACTED_CHARS)}
+ if(ext==='pptx'){await muatScript('https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js',()=>!!window.JSZip);const zip=await window.JSZip.loadAsync(buffer),names=Object.keys(zip.files).filter(n=>/^ppt\/slides\/slide\d+\.xml$/.test(n)).sort((a,b)=>Number(a.match(/slide(\d+)/)[1])-Number(b.match(/slide(\d+)/)[1]));let out='';for(let i=0;i<Math.min(names.length,100);i++){const xml=await zip.files[names[i]].async('text'),doc=new DOMParser().parseFromString(xml,'application/xml');out+='\n[Slide '+(i+1)+']\n'+Array.from(doc.getElementsByTagName('a:t')).map(n=>n.textContent).join(' ');if(out.length>=MAX_EXTRACTED_CHARS)break}return out.slice(0,MAX_EXTRACTED_CHARS)}
+ throw Error('Format file tidak didukung: '+ext);
+}
+function renderBerkas(){const box=$('attachments');box.replaceChildren();const filesWrap=$('composerFiles');if(filesWrap)filesWrap.hidden=!berkasDipilih.length;for(const f of berkasDipilih){const chip=document.createElement('div');chip.className='attachment-chip';const label=document.createElement('span');label.textContent=f.name+' · '+ukuranBerkas(f.size);label.title=f.name;const remove=document.createElement('button');remove.type='button';remove.textContent='×';remove.setAttribute('aria-label','Hapus '+f.name);remove.onclick=()=>{berkasDipilih=berkasDipilih.filter(x=>x.id!==f.id);renderBerkas()};chip.append(label,remove);box.appendChild(chip)}$('attachBtn').disabled=sibuk}
+async function tambahBerkas(files){const incoming=Array.from(files||[]);$('fileInput').value='';for(const file of incoming){if(berkasDipilih.length>=MAX_FILES){beriTahu('Maksimal '+MAX_FILES+' file sekali kirim.');break}if(file.size>MAX_FILE_SIZE){beriTahu(file.name+' terlalu besar (maks. 20 MB).');continue}if(berkasDipilih.some(f=>f.name===file.name&&f.size===file.size)){continue}const ext=file.name.split('.').pop().toLowerCase(),item={id:buatId(),name:file.name,size:file.size,type:file.type,kind:'text',text:'',inlineData:null,mimeType:file.type||'application/octet-stream',status:'loading'};berkasDipilih.push(item);renderBerkas();try{const buffer=await bacaFile(file);if(gambarFile(file)){item.kind='image';item.mimeType=file.type||({'jpg':'image/jpeg','jpeg':'image/jpeg','png':'image/png','webp':'image/webp','gif':'image/gif'}[ext]||file.type);const bytes=new Uint8Array(buffer);let binary='';for(let i=0;i<bytes.length;i+=0x8000)binary+=String.fromCharCode(...bytes.subarray(i,i+0x8000));item.inlineData=btoa(binary)}else{item.text=await skenarioTeks(file,buffer);if(!item.text.trim())item.text='[Tidak ada teks yang dapat diekstrak dari file ini.]'}item.status='ready';beriTahu('File siap: '+file.name)}catch(e){berkasDipilih=berkasDipilih.filter(x=>x.id!==item.id);beriTahu('Tidak bisa membaca '+file.name+': '+(e.message||'format tidak didukung'));console.error('AQIZ upload error',e)}renderBerkas()}}
+$('attachBtn').addEventListener('click',()=>{if(!sibuk)$('fileInput').click()});$('fileInput').addEventListener('change',e=>tambahBerkas(e.target.files));
+function ukurInput(){input.style.height='auto';input.style.height=Math.min(input.scrollHeight,130)+'px';input.style.overflowY=input.scrollHeight>130?'auto':'hidden';kirim.disabled=sibuk||(!input.value.trim()&&!berkasDipilih.length)}
+async function kirimPesan(teks){teks=String(teks||'').trim();if(sibuk||(!teks&&!berkasDipilih.length))return;if(berkasDipilih.some(f=>f.status!=='ready')){beriTahu('Tunggu sampai semua file selesai diproses.');return}const lampiran=berkasDipilih.slice();const catatanLampiran=lampiran.map(f=>'[Lampiran: '+f.name+']'+(f.kind==='text'?'\nIsi file:\n'+f.text:'')).join('\n\n');const teksTersimpan=(teks?teks+'\n\n':'')+catatanLampiran;const partsKirim=[{text:(teks||'Tolong analisis lampiran yang saya kirim.')+'\n\n'+catatanLampiran},...lampiran.filter(f=>f.kind==='image').map(f=>({inline_data:{mime_type:f.mimeType,data:f.inlineData}}))];if(API_KEY.startsWith('ISI_')){gelembung('bot','API key belum diisi.',false).classList.add('error');return}if(!idAktif||!sesiAktif())buatChat();const sesi= sesiAktif();const pesanSesi=sesi.messages||(sesi.messages=[]);riwayat=pesanSesi;sibuk=true;kirim.disabled=true;kirim.classList.add('loading');const req={id:++requestId,sesiId:sesi.id,dibatalkan:false};permintaanAktif=req;chat.dataset.following='true';const previewData={};for(const f of lampiran){if(f.kind==='image'&&f.inlineData)previewData[f.id]='data:'+f.mimeType+';base64,'+f.inlineData}const pesanPengguna={role:'user',parts:[{text:teksTersimpan}],attachments:lampiran.map(f=>({id:f.id,name:f.name,size:f.size,type:f.type,mimeType:f.mimeType,kind:f.kind}))};renderPesanPengguna(pesanPengguna,true);riwayat.push(pesanPengguna);simpanPesanUntuk(sesi,riwayat);berkasDipilih=[];renderBerkas();input.value='';ukurInput();const tungguEl=gelembung('bot','<span class="titik"><span></span><span></span><span></span></span>',true);tungguEl.classList.add('thinking');const snapshot=riwayat.map(m=>({role:m.role,parts:(m.parts||[]).map(p=>({text:p.text||''}))}));if(snapshot.length&&snapshot[snapshot.length-1].role==='user')snapshot[snapshot.length-1].parts=partsKirim;const masihAktif=()=>!req.dibatalkan&&permintaanAktif===req&&daftarChat.some(s=>s.id===req.sesiId);try{const jawaban=await tanya(snapshot);if(!masihAktif())return;riwayat.push({role:'model',parts:[{text:jawaban}]});simpanPesanUntuk(sesi,riwayat);if(idAktif===req.sesiId){await tampilkanJawaban(tungguEl,jawaban,masihAktif)}}catch(err){if(!masihAktif())return;const terakhir=riwayat[riwayat.length-1];if(terakhir?.role==='user')riwayat.pop();simpanPesanUntuk(sesi,riwayat);if(idAktif===req.sesiId){tungguEl.classList.remove('thinking');tungguEl.classList.add('error');tungguEl.textContent='Gagal: '+(err instanceof TypeError?'Tidak ada koneksi internet.':err.message)}}finally{if(permintaanAktif===req){permintaanAktif=null;sibuk=false;kirim.classList.remove('loading');renderBerkas();ukurInput()}}}
+form.addEventListener('submit',e=>{e.preventDefault();kirimPesan(input.value)});input.addEventListener('input',ukurInput);input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();if(!sibuk&&(input.value.trim()||berkasDipilih.length))form.requestSubmit()}});chat.addEventListener('click',e=>{const chip=e.target.closest('.chip');if(chip)kirimPesan(chip.textContent.trim())});$('openHistory').addEventListener('click',bukaPanel);$('closeHistory').addEventListener('click',tutupPanel);$('historyBackdrop').addEventListener('click',tutupPanel);$('newChat').addEventListener('click',obrolanBaru);$('hapus').addEventListener('click',obrolanBaru);$('shareChat').addEventListener('click',()=>bagikanSesi(sesiAktif()));document.addEventListener('keydown',e=>{if(e.key==='Escape')tutupPanel()});
+(function pulihkan(){try{const tersimpan=JSON.parse(localStorage.getItem(KUNCI)||'null');if(Array.isArray(tersimpan)){daftarChat=tersimpan.filter(s=>s&&s.id&&Array.isArray(s.messages));for(const s of daftarChat){if(!s.title||s.title==='Obrolan baru'){const first=s.messages.find(m=>m.role==='user')?.parts?.[0]?.text;if(first){s.title=buatJudul(first);s.titleLocked=true}}}}else{const lama=JSON.parse(localStorage.getItem(KUNCI_LAMA)||'[]');if(Array.isArray(lama)&&lama.length){const id=buatId();daftarChat=[{id,title:buatJudul(lama.find(m=>m.role==='user')?.parts?.[0]?.text||'Obrolan sebelumnya'),titleLocked:true,updated:Date.now(),messages:lama}];simpanSemua()}}}catch(_){daftarChat=[]}if(!daftarChat.length)buatChat();daftarChat.sort((a,b)=>(b.updated||0)-(a.updated||0));idAktif=daftarChat[0].id;riwayat=daftarChat[0].messages||[];renderRiwayat();if(riwayat.length)renderSesi(daftarChat[0]);else kosongkanLayar();ukurInput();imporTautanBagikan()})();
+</script>
+<script>
+/* ===== AQIZ ai: Mode Suara (ngobrol pakai suara, popup ala GPT/Gemini) ===== */
+(function(){
+'use strict';
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const synth=window.speechSynthesis;
+const KUNCI_SUARA='aqiz_suara_v1';
+const V={open:false,state:'idle',muted:false,gender:'cewek',rate:1,engine:'gemini',rec:null,finalText:'',interim:'',queue:[],speaking:false,token:0,sesi:0,voices:[]};
+try{const s=JSON.parse(localStorage.getItem(KUNCI_SUARA)||'null');if(s){if(s.gender==='cowok'||s.gender==='cewek')V.gender=s.gender;if(+s.rate>=.7&&+s.rate<=1.5)V.rate=+s.rate;if(s.engine==='device'||s.engine==='gemini')V.engine=s.engine}}catch(_){}
+function simpanSuara(){try{localStorage.setItem(KUNCI_SUARA,JSON.stringify({gender:V.gender,rate:V.rate,engine:V.engine}))}catch(_){}}
+const tip=m=>{try{beriTahu(m)}catch(_){}};
+
+/* ---------- UI ---------- */
+const icoMic='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>';
+const icoMicOff='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 3 18 18"/><path d="M9 5.2V6a3 3 0 0 0 5.2 2M15 11v.5a3 3 0 0 1-4.6 2.5"/><path d="M5 11a7 7 0 0 0 11.5 5.3M19 11a7 7 0 0 1-.4 2.3M12 18v3"/></svg>';
+const icoWave='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 11v2"/></svg>';
+const icoX='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m18 6-12 12M6 6l12 12"/></svg>';
+const icoStop='<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2.5"/></svg>';
+
+const ov=document.createElement('div');
+ov.className='voice-overlay';ov.id='voiceOverlay';ov.dataset.state='idle';
+ov.setAttribute('role','dialog');ov.setAttribute('aria-modal','true');ov.setAttribute('aria-label','Mode suara');
+ov.innerHTML=
+'<div class="voice-card">'+
+ '<button type="button" class="ikon-btn voice-close" id="vClose" aria-label="Tutup mode suara">'+icoX+'</button>'+
+ '<p class="voice-title">AQIZ ai · Mode suara</p>'+
+ '<div class="voice-orb-wrap"><span class="voice-ring"></span><span class="voice-ring r2"></span><button type="button" class="voice-orb" id="vOrb" aria-label="Ketuk untuk bicara atau menyela"></button></div>'+
+ '<p class="voice-status" id="vStatus" aria-live="polite">Siap</p>'+
+ '<p class="voice-transcript" id="vText"></p>'+
+ '<div class="voice-controls">'+
+  '<button type="button" class="voice-ctl" id="vMute" aria-label="Matikan mikrofon" title="Mikrofon">'+icoMic+'</button>'+
+  '<button type="button" class="voice-ctl" id="vStop" aria-label="Hentikan suara AI" title="Hentikan suara">'+icoStop+'</button>'+
+  '<button type="button" class="voice-ctl end" id="vEnd" aria-label="Akhiri" title="Akhiri">'+icoX+'</button>'+
+ '</div>'+
+ '<div class="voice-settings">'+
+  '<div class="voice-row"><span>Suara AI</span><div class="voice-seg" id="vGender"><button type="button" data-g="cewek">Cewek</button><button type="button" data-g="cowok">Cowok</button></div></div>'+
+  '<div class="voice-row"><span>Kecepatan</span><div class="voice-seg" id="vRate"><button type="button" data-r="0.85">Pelan</button><button type="button" data-r="1">Normal</button><button type="button" data-r="1.2">Cepat</button></div></div>'+
+  '<p class="voice-hint">Bisa juga lewat prompt: ucapkan atau ketik &ldquo;pakai suara cowok&rdquo; / &ldquo;pakai suara cewek&rdquo;.</p>'+
+ '</div>'+
+'</div>';
+document.body.appendChild(ov);
+const $v=id=>document.getElementById(id);
+
+const btn=document.createElement('button');
+btn.type='button';btn.className='voice-btn';btn.id='voiceBtn';btn.title='Mode suara';btn.setAttribute('aria-label','Mulai mode suara');btn.innerHTML=icoWave;
+const kirimBtn=document.getElementById('kirim');
+if(kirimBtn&&kirimBtn.parentNode)kirimBtn.parentNode.insertBefore(btn,kirimBtn);
+
+function setState(s,label){
+ V.state=s;ov.dataset.state=s;
+ const names={idle:'Siap',listening:'Mendengarkan…',thinking:'Berpikir…',speaking:'Berbicara…',muted:'Mikrofon mati'};
+ $v('vStatus').textContent=label||names[s]||'';
+ const m=$v('vMute');m.innerHTML=V.muted?icoMicOff:icoMic;m.classList.toggle('active',V.muted);
+ m.setAttribute('aria-label',V.muted?'Nyalakan mikrofon':'Matikan mikrofon');
+}
+function setText(user,ai){
+ const t=$v('vText');t.textContent='';
+ if(user){const b=document.createElement('b');b.textContent=user;t.appendChild(b)}
+ if(ai){if(user)t.appendChild(document.createElement('br'));t.appendChild(document.createTextNode(ai))}
+}
+function renderSettings(){
+ $v('vGender').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.g===V.gender));
+ $v('vRate').querySelectorAll('button').forEach(b=>b.classList.toggle('on',Math.abs(+b.dataset.r-V.rate)<.01));
+}
+
+/* ---------- Suara AI (TTS) ---------- */
+function muatSuara(){if(synth)V.voices=synth.getVoices()||[]}
+if(synth){muatSuara();synth.addEventListener?.('voiceschanged',muatSuara)}
+const RE_CEWEK=/female|woman|perempuan|wanita|gita|damayanti|google bahasa indonesia|siti|ayu|sari|indah|zira|samantha|susan|hazel|karen|aria|jenny|google us english|google uk english female/i;
+const RE_COWOK=/\bmale\b|\bman\b|pria|laki|andika|ardi|rizki|jaka|budi|bagus|danu|david|mark|james|guy|daniel|george|richard|fred|alex|google uk english male/i;
+function hitungKata(s,daftar){let n=0;for(const w of daftar)n+=s.split(w).length-1;return n}
+function deteksiBahasa(t){
+ const s=' '+String(t||'').toLowerCase().replace(/[^a-z\s]/g,' ').replace(/\s+/g,' ')+' ';
+ const idw=[' yang ',' dan ',' di ',' ke ',' dari ',' untuk ',' dengan ',' ini ',' itu ',' adalah ',' tidak ',' bisa ',' aku ',' kamu ',' saya ',' akan ',' juga ',' pada ',' atau ',' ada ',' sudah ',' kalau ',' karena ',' jadi ',' bagaimana ',' apa ',' nya '];
+ const enw=[' the ',' and ',' of ',' to ',' is ',' are ',' you ',' that ',' with ',' for ',' this ',' it ',' in ',' can ',' have ',' what ',' your ',' will ',' be '];
+ return hitungKata(s,enw)>hitungKata(s,idw)+1?'en':'id';
+}
+function pilihSuara(bhs){
+ bhs=bhs||'id';
+ const cocokBahasa=v=>{const l=String(v.lang||'').toLowerCase().replace('_','-');return bhs==='id'?(/^(id|in)(-|$)/.test(l)||/indonesia/i.test(v.name||'')):/^en(-|$)/.test(l)};
+ const pool=V.voices.filter(cocokBahasa);
+ let voice=null,cocok=false;
+ if(V.gender==='cowok'){
+  voice=pool.find(v=>RE_COWOK.test(v.name)&&!RE_CEWEK.test(v.name));
+  cocok=!!voice;
+  if(!voice&&pool.length>1){const lain=pool.filter(v=>!RE_CEWEK.test(v.name));voice=lain[lain.length-1]||null}
+ }else{
+  voice=pool.find(v=>RE_CEWEK.test(v.name));
+  cocok=!!voice;
+  if(!voice&&pool.length)voice=pool[0];
+ }
+ if(!voice&&pool.length)voice=pool[0];
+ if(bhs==='id'&&!pool.length&&V.voices.length&&!V.peringatan){V.peringatan=true;tip('Suara Indonesia belum terpasang di perangkat. Pasang lewat pengaturan Text-to-speech, lalu muat ulang.')}
+ return {voice,lang:voice?voice.lang:(bhs==='id'?'id-ID':'en-US'),pitch:V.gender==='cowok'?(cocok?1:.8):(cocok?1:1.1)};
+}
+function siapkanSuara(cb){
+ muatSuara();if(V.voices.length||!synth){cb();return}
+ let done=false;const f=()=>{if(done)return;done=true;muatSuara();cb()};
+ try{synth.addEventListener('voiceschanged',f,{once:true})}catch(_){}
+ setTimeout(f,1200);
+}
+function bersihkanUntukSuara(teks){
+ let t=String(teks||'');
+ t=t.replace(/\[\[AQIZ_SOURCES\]\][\s\S]*?\[\[\/AQIZ_SOURCES\]\]/g,'')
+    .replace(/\[\[AQIZ_FILE_START\]\][\s\S]*?\[\[AQIZ_FILE_END\]\]/g,' File sudah disiapkan di layar. ')
+    .replace(/```[\s\S]*?```/g,' Kodenya bisa kamu lihat di layar. ')
+    .replace(/Pencarian web tidak mengembalikan tautan sumber[^\n]*/gi,'')
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,'$1')
+    .replace(/https?:\/\/\S+/g,'')
+    .replace(/`([^`]+)`/g,'$1')
+    .replace(/^\s{0,3}#{1,6}\s+/gm,'')
+    .replace(/^\s*[-*+]\s+/gm,'')
+    .replace(/^\s*(\d+)[.)]\s+/gm,'$1. ')
+    .replace(/^\s*>\s?/gm,'')
+    .replace(/\|/g,' ')
+    .replace(/(\*\*|__|\*|_|~~)/g,'')
+    .replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]/gu,'')
+    .replace(/\s*\n+\s*/g,'. ').replace(/\.\s*\.+/g,'.').replace(/\s{2,}/g,' ').trim();
+ return t;
+}
+function potongKalimat(t){
+ const out=[];const kal=t.match(/[^.!?;:]+[.!?;:]*\s*/g)||[t];
+ let cur='';
+ for(const k of kal){
+  if((cur+k).length>170&&cur){out.push(cur.trim());cur=''}
+  if(k.length>170){const w=k.split(/\s+/);let p='';for(const x of w){if((p+' '+x).length>170){out.push(p.trim());p=x}else p+=' '+x}cur=p+' '}
+  else cur+=k;
+ }
+ if(cur.trim())out.push(cur.trim());
+ return out.filter(x=>/[\p{L}\p{N}]/u.test(x));
+}
+function berhentiBicara(){V.token++;V.jadwal=0;V.queue=[];V.speaking=false;try{synth&&synth.cancel()}catch(_){}
+ try{if(curSrc){const x=curSrc;curSrc=null;x.onended=null;x.stop()}}catch(_){}
+ try{if(V.ctrls){for(const c of V.ctrls)c.abort();V.ctrls.clear()}}catch(_){}
+ try{if(V.srcs){for(const x of V.srcs){x.onended=null;try{x.stop()}catch(_){}}V.srcs=[]}}catch(_){}}
+function bicaraBrowser(teks,selesai){
+ if(synth&&!V.voices.length&&!V.sudahTunggu){V.sudahTunggu=true;siapkanSuara(()=>bicaraBrowser(teks,selesai));return}
+ const bersih=bersihkanUntukSuara(teks);
+ if(!synth||!bersih){selesai&&selesai();return}
+ berhentiBicara();
+ const my=V.token;const chunks=potongKalimat(bersih);
+ if(!chunks.length){selesai&&selesai();return}
+ const bhs=deteksiBahasa(bersih);const {voice,pitch,lang}=pilihSuara(bhs);
+ V.speaking=true;let i=0;
+ const next=()=>{
+  if(my!==V.token)return;
+  if(i>=chunks.length){V.speaking=false;selesai&&selesai();return}
+  const u=new SpeechSynthesisUtterance(chunks[i++]);
+  u.lang=lang;if(voice)u.voice=voice;
+  u.rate=V.rate;u.pitch=pitch;u.volume=1;
+  u.onend=()=>next();
+  u.onerror=e=>{if(e&&(e.error==='interrupted'||e.error==='canceled'))return;next()};
+  try{synth.speak(u)}catch(_){next()}
+ };
+ next();
+}
+
+/* ---------- Suara Gemini (TTS natural, otomatis ikut bahasa teks) ---------- */
+const TTS_BASE='https://generativelanguage.googleapis.com/v1beta/';
+const SUARA_GEMINI={cewek:'Kore',cowok:'Charon'};
+const VARIAN_TTS=[
+ {t:'int',m:'gemini-3.8-flash-lite-tts'},
+ {t:'int',m:'gemini-3.8-flash-tts'},
+ {t:'int',m:'gemini-3.1-flash-tts-preview'},
+ {t:'gen',m:'gemini-2.5-pro-preview-tts'},
+ {t:'gen',m:'gemini-3.1-flash-tts-preview'}
+];
+try{const i=+localStorage.getItem('aqiz_tts_idx');if(i>=0&&i<VARIAN_TTS.length)V.ttsIdx=i}catch(_){}
+let AC=null,curSrc=null;
+function ctxAudio(){
+ try{if(!AC){const C=window.AudioContext||window.webkitAudioContext;AC=new C()}if(AC.state==='suspended')AC.resume()}catch(_){}
+ return AC;
+}
+function b64Bytes(b){const bin=atob(b);const u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return u}
+function cariAudio(obj){
+ let found=null;
+ (function w(x){
+  if(!x||typeof x!=='object')return;
+  if(Array.isArray(x)){x.forEach(w);return}
+  const inl=x.inlineData||x.inline_data;
+  if(inl&&typeof inl.data==='string'&&inl.data.length>200)found={data:inl.data,mime:inl.mimeType||inl.mime_type||''};
+  if(typeof x.data==='string'&&x.data.length>200)found={data:x.data,mime:x.mime_type||x.mimeType||''};
+  for(const k in x)w(x[k]);
+ })(obj);
+ return found;
+}
+async function dekodeAudio(a){
+ const ac=ctxAudio();if(!ac)throw Error('AudioContext tidak tersedia');
+ const u=b64Bytes(a.data);
+ const riff=u.length>4&&u[0]===82&&u[1]===73&&u[2]===70&&u[3]===70;
+ if(riff||/wav|mp3|mpeg|ogg/i.test(a.mime||''))return await new Promise((res,rej)=>{ac.decodeAudioData(u.buffer.slice(0),res,rej)});
+ let rate=24000;const m=/rate=(\d+)/i.exec(a.mime||'');if(m)rate=+m[1];
+ const n=Math.floor(u.length/2),buf=ac.createBuffer(1,n,rate),ch=buf.getChannelData(0),dv=new DataView(u.buffer);
+ for(let i=0;i<n;i++)ch[i]=dv.getInt16(i*2,true)/32768;
+ return buf;
+}
+async function ambilAudioGemini(teks,my){
+ const bhs=deteksiBahasa(teks);
+ const gaya=bhs==='id'?'Bicara dalam bahasa Indonesia dengan logat Indonesia yang natural, hangat, dan santai seperti mengobrol dengan teman':'Speak naturally in a warm, friendly, conversational tone';
+ const suara=SUARA_GEMINI[V.gender]||'Kore';
+ const urut=[],mulai=V.ttsIdx||0;
+ for(let k=0;k<VARIAN_TTS.length;k++)urut.push((mulai+k)%VARIAN_TTS.length);
+ let err=null;
+ for(const idx of urut){
+  if(my!==V.token)throw Error('batal');
+  const v=VARIAN_TTS[idx];
+  const ctrl=new AbortController();(V.ctrls||(V.ctrls=new Set())).add(ctrl);
+  const tm=setTimeout(()=>ctrl.abort(),25000);
+  try{
+   let url,body;
+   if(v.t==='int'){
+    url=TTS_BASE+'interactions';
+    body={model:v.m,input:[{type:'user_input',content:[{type:'text',text:teks,annotations:[{type:'speech_metadata',style:gaya}]}]}],response_format:{type:'audio'},generation_config:{speech_config:[{voice:suara}]}};
+   }else{
+    url=TTS_BASE+'models/'+v.m+':generateContent';
+    body={contents:[{parts:[{text:gaya+': '+teks}]}],generationConfig:{responseModalities:['AUDIO'],speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:suara}}}}};
+   }
+   const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':API_KEY},body:JSON.stringify(body),signal:ctrl.signal});
+   const data=await res.json().catch(()=>({}));
+   if(!res.ok)throw Error(data.error?.message||('HTTP '+res.status));
+   const a=cariAudio(data);if(!a)throw Error('Audio kosong');
+   const buf=await dekodeAudio(a);V.ttsIdx=idx;try{localStorage.setItem('aqiz_tts_idx',String(idx))}catch(_){}return buf;
+  }catch(e){err=e;if(my!==V.token)throw e}
+  finally{clearTimeout(tm);V.ctrls&&V.ctrls.delete(ctrl)}
+ }
+ throw err||Error('TTS gagal');
+}
+function gabungChunk(list){
+ const out=[];let cur='';
+ for(const k of list){const lim=out.length===0?70:260;if(cur&&(cur+' '+k).length>lim){out.push(cur);cur=k}else cur=cur?cur+' '+k:k}
+ if(cur)out.push(cur);return out;
+}
+async function bicaraGeminiLama(teks,selesai){
+ let bersih=bersihkanUntukSuara(teks);
+ if(!bersih){selesai&&selesai();return true}
+ bersih=bersih.slice(0,900);
+ berhentiBicara();
+ const my=V.token,chunks=gabungChunk(potongKalimat(bersih));
+ if(!chunks.length){selesai&&selesai();return true}
+ V.speaking=true;
+ try{$v('vStatus').textContent='Menyiapkan suara…'}catch(_){}
+ const ac=ctxAudio();
+ const ambil=i=>ambilAudioGemini(chunks[i],my).catch(e=>e);
+ const pends=chunks.map((_,i)=>ambil(i));
+ for(let i=0;i<chunks.length;i++){
+  const buf=await pends[i];
+  if(my!==V.token)return true;
+  if(buf instanceof Error){if(i===0){V.speaking=false;return false}break}
+  try{if(V.open&&V.state==='speaking')$v('vStatus').textContent='Berbicara…'}catch(_){}
+  await new Promise(res=>{
+   const src=ac.createBufferSource();src.buffer=buf;src.playbackRate.value=V.rate||1;src.connect(ac.destination);
+   curSrc=src;src.onended=()=>res();src.start();
+  });
+  if(my!==V.token)return true;
+ }
+ V.speaking=false;selesai&&selesai();return true;
+}
+/* ---------- Gemini TTS streaming: suara mulai saat potongan pertama datang ---------- */
+const STREAM_MODELS=['gemini-3.8-flash-lite-tts','gemini-3.8-flash-tts','gemini-3.1-flash-tts-preview'];
+try{const i=+localStorage.getItem('aqiz_tts_sidx');if(i>=0&&i<STREAM_MODELS.length)V.sIdx=i}catch(_){}
+function cariDelta(o){
+ if(!o||typeof o!=='object')return null;
+ const d=o.delta;
+ if(d&&typeof d.data==='string'&&(!o.event_type||o.event_type==='step.delta')&&(!d.type||d.type==='audio'))return d.data;
+ return null;
+}
+async function bacaStream(res,ac,my){
+ const reader=res.body.getReader(),dec=new TextDecoder();
+ let buf='',all='',sisa=new Uint8Array(0),got=false,total=0,mulaiPlay=false,antrian=[],lastSrc=null,selesaiBaca=false,resolveFin;
+ const fin=new Promise(r=>{resolveFin=r});
+ V.srcs=V.srcs||[];
+ const putar=b=>{
+  const rate=V.rate||1,src=ac.createBufferSource();
+  src.buffer=b;src.playbackRate.value=rate;src.connect(ac.destination);
+  const t=Math.max(V.jadwal||0,ac.currentTime+0.05);
+  src.start(t);V.jadwal=t+b.duration/rate;
+  V.srcs.push(src);lastSrc=src;
+  src.onended=()=>{const i=V.srcs.indexOf(src);if(i>=0)V.srcs.splice(i,1);if(src===lastSrc&&selesaiBaca)resolveFin()};
+ };
+ const mulai=()=>{
+  mulaiPlay=true;
+  try{if(V.open&&V.state==='speaking')$v('vStatus').textContent='Berbicara…'}catch(_){}
+  for(const b of antrian)putar(b);antrian=[];
+ };
+ const tambah=b64=>{
+  const u=b64Bytes(b64);
+  let a8=u;if(sisa.length){a8=new Uint8Array(sisa.length+u.length);a8.set(sisa);a8.set(u,sisa.length)}
+  const n=Math.floor(a8.length/2);
+  const dv=new DataView(a8.buffer,a8.byteOffset,n*2);
+  sisa=a8.slice(n*2);
+  if(!n)return;
+  const b=ac.createBuffer(1,n,24000),ch=b.getChannelData(0);
+  for(let i=0;i<n;i++)ch[i]=dv.getInt16(i*2,true)/32768;
+  got=true;total+=n/24000;
+  if(!mulaiPlay){antrian.push(b);if(total>=0.3)mulai()}else putar(b);
+ };
+ const proses=line=>{
+  if(!line||line.startsWith('event:')||line.startsWith(':')||line.startsWith('id:'))return;
+  if(line.startsWith('data:'))line=line.slice(5).trim();
+  if(!line||line==='[DONE]'||line[0]!=='{')return;
+  let o;try{o=JSON.parse(line)}catch(_){return}
+  const d=cariDelta(o);if(d)tambah(d);
+ };
+ while(true){
+  const {done,value}=await reader.read();
+  if(done)break;
+  if(my!==V.token){try{reader.cancel()}catch(_){}return {got:true,fin:Promise.resolve()}}
+  const txt=dec.decode(value,{stream:true});all+=txt;buf+=txt;
+  let k;while((k=buf.indexOf('\n'))>=0){const line=buf.slice(0,k).trim();buf=buf.slice(k+1);proses(line)}
+ }
+ if(buf.trim())proses(buf.trim());
+ if(!got){
+  // cadangan: respons ternyata satu JSON utuh (bukan SSE)
+  try{const o=JSON.parse(all),a=cariAudio(o);if(a){const b=await dekodeAudio(a);got=true;antrian.push(b);mulai()}}catch(_){}
+ }
+ if(got&&!mulaiPlay)mulai();
+ selesaiBaca=true;
+ if(!got||!lastSrc||V.srcs.indexOf(lastSrc)<0)resolveFin();
+ return {got,fin};
+}
+async function streamGemini(teks,my,akhir){
+ const bhs=deteksiBahasa(teks);
+ const gaya=bhs==='id'?'Bicara dalam bahasa Indonesia dengan logat Indonesia yang natural, hangat, dan santai seperti mengobrol dengan teman':'Speak naturally in a warm, friendly, conversational tone';
+ const suara=SUARA_GEMINI[V.gender]||'Kore';
+ const ac=ctxAudio();if(!ac)return 'gagal';
+ const mulai=V.sIdx||0;
+ for(let k=0;k<STREAM_MODELS.length;k++){
+  if(my!==V.token)return 'batal';
+  const idx=(mulai+k)%STREAM_MODELS.length;
+  const ctrl=new AbortController();(V.ctrls||(V.ctrls=new Set())).add(ctrl);
+  const tm=setTimeout(()=>ctrl.abort(),30000);
+  let r=null;
+  try{
+   const res=await fetch(TTS_BASE+'interactions',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':API_KEY},signal:ctrl.signal,
+    body:JSON.stringify({model:STREAM_MODELS[idx],input:[{type:'user_input',content:[{type:'text',text:teks,annotations:[{type:'speech_metadata',style:gaya}]}]}],response_format:{type:'audio'},generation_config:{speech_config:[{voice:suara}]},stream:true})});
+   if(!res.ok){const d=await res.json().catch(()=>({}));const er=Error(d.error?.message||('HTTP '+res.status));er.status=res.status;throw er}
+   r=await bacaStream(res,ac,my);
+  }catch(e){
+   if(my!==V.token)return 'batal';
+   if(e&&e.status===429)return 'gagal';
+  }finally{clearTimeout(tm);V.ctrls&&V.ctrls.delete(ctrl)}
+  if(r&&r.got){
+   V.sIdx=idx;try{localStorage.setItem('aqiz_tts_sidx',String(idx))}catch(_){}
+   if(akhir)akhir.fin=r.fin;else await r.fin;
+   return my!==V.token?'batal':'ok';
+  }
+ }
+ return 'gagal';
+}
+async function streamGeminiKe(teks,my,onBuf){
+ const bhs=deteksiBahasa(teks);
+ const gaya=bhs==='id'?'Bicara dalam bahasa Indonesia dengan logat Indonesia yang natural, hangat, dan santai seperti mengobrol dengan teman':'Speak naturally in a warm, friendly, conversational tone';
+ const suara=SUARA_GEMINI[V.gender]||'Kore';
+ const ac=ctxAudio();if(!ac)return 'gagal';
+ const mulai=V.sIdx||0;
+ for(let k=0;k<STREAM_MODELS.length;k++){
+  if(my!==V.token)return 'batal';
+  const idx=(mulai+k)%STREAM_MODELS.length;
+  const ctrl=new AbortController();(V.ctrls||(V.ctrls=new Set())).add(ctrl);
+  const tm=setTimeout(()=>ctrl.abort(),30000);
+  let got=false;
+  try{
+   const res=await fetch(TTS_BASE+'interactions',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':API_KEY},signal:ctrl.signal,
+    body:JSON.stringify({model:STREAM_MODELS[idx],input:[{type:'user_input',content:[{type:'text',text:teks,annotations:[{type:'speech_metadata',style:gaya}]}]}],response_format:{type:'audio'},generation_config:{speech_config:[{voice:suara}]},stream:true})});
+   if(!res.ok){const d=await res.json().catch(()=>({}));const er=Error(d.error?.message||('HTTP '+res.status));er.status=res.status;throw er}
+   const reader=res.body.getReader(),dec=new TextDecoder();
+   let buf='',all='',sisa=new Uint8Array(0);
+   const tambah=b64=>{
+    const u=b64Bytes(b64);
+    let a8=u;if(sisa.length){a8=new Uint8Array(sisa.length+u.length);a8.set(sisa);a8.set(u,sisa.length)}
+    const n=Math.floor(a8.length/2);
+    const dv=new DataView(a8.buffer,a8.byteOffset,n*2);
+    sisa=a8.slice(n*2);
+    if(!n)return;
+    const b=ac.createBuffer(1,n,24000),ch=b.getChannelData(0);
+    for(let i=0;i<n;i++)ch[i]=dv.getInt16(i*2,true)/32768;
+    got=true;onBuf(b);
+   };
+   const proses=line=>{
+    if(!line||line.startsWith('event:')||line.startsWith(':')||line.startsWith('id:'))return;
+    if(line.startsWith('data:'))line=line.slice(5).trim();
+    if(!line||line==='[DONE]'||line[0]!=='{')return;
+    let o;try{o=JSON.parse(line)}catch(_){return}
+    const d=cariDelta(o);if(d)tambah(d);
+   };
+   while(true){
+    const {done,value}=await reader.read();
+    if(done)break;
+    if(my!==V.token){try{reader.cancel()}catch(_){}return 'batal'}
+    const txt=dec.decode(value,{stream:true});all+=txt;buf+=txt;
+    let q;while((q=buf.indexOf('\n'))>=0){const line=buf.slice(0,q).trim();buf=buf.slice(q+1);proses(line)}
+   }
+   if(buf.trim())proses(buf.trim());
+   if(!got){try{const o=JSON.parse(all),a=cariAudio(o);if(a){const b=await dekodeAudio(a);got=true;onBuf(b)}}catch(_){}}
+  }catch(e){
+   if(my!==V.token)return 'batal';
+  }finally{clearTimeout(tm);V.ctrls&&V.ctrls.delete(ctrl)}
+  if(got){V.sIdx=idx;try{localStorage.setItem('aqiz_tts_sidx',String(idx))}catch(_){}return 'ok'}
+ }
+ return 'gagal';
+}
+async function bicaraGemini(teks,selesai){
+ let bersih=bersihkanUntukSuara(teks);
+ if(!bersih){selesai&&selesai();return true}
+ bersih=bersih.slice(0,700);
+ berhentiBicara();
+ const my=V.token;
+ V.speaking=true;
+ try{$v('vStatus').textContent='Menyiapkan suara…'}catch(_){}
+ let st='gagal';
+ if((V.streamGagal||0)<2){try{st=await streamGemini(bersih,my)}catch(_){st='gagal'}}
+ if(my!==V.token)return true;
+ if(st==='ok'){V.speaking=false;selesai&&selesai();return true}
+ V.streamGagal=(V.streamGagal||0)+1;
+ V.speaking=false;
+ return await bicaraGeminiLama(teks,selesai);
+}
+
+/* ---------- Jawaban streaming: teks mengalir, suara dibuat per kalimat secara bersamaan ---------- */
+const BUTUH_CARI=/sumber|link|tautan|referensi|jurnal|berita|terbaru|terkini|hari ini|harga|cuaca|skor|kurs|sekarang|latest|news|today|price|weather/i;
+const INSTR_SUARA='MODE SUARA AKTIF: Pengguna berbicara lewat suara dan jawabanmu akan DIBACAKAN dengan suara. Langsung jawab intinya tanpa basa-basi, singkat, natural, dan santai seperti mengobrol (maksimal 2 kalimat pendek kecuali diminta detail). Jangan gunakan tabel, emoji, markdown, kode, atau daftar.';
+function potongKalimatStream(full,idx,akhir,nKirim){
+ const out=[];
+ while(true){
+  const sisa=full.slice(idx);
+  const awal=(nKirim+out.length)===0;
+  const min=awal?16:60;
+  const re=awal?/[.!?…,;:]+["')\]]*(?=\s)|\n/g:/[.!?…]+["')\]]*(?=\s)|\n/g;let m,cut=-1;
+  while((m=re.exec(sisa))){const end=m.index+m[0].length;if(end>=min){cut=end;break}}
+  if(cut<0){if(akhir&&sisa.trim()){out.push(sisa);idx=full.length}return {out,idx}}
+  out.push(sisa.slice(0,cut));idx+=cut;
+ }
+}
+async function jawabStream(teks){
+ berhentiBicara();
+ const my=V.token;
+ const ctrl=new AbortController();(V.ctrls||(V.ctrls=new Set())).add(ctrl);
+ const snapshot=riwayat.map(m=>({role:m.role,parts:(m.parts||[]).map(p=>({text:p.text||''}))}));
+ snapshot.push({role:'user',parts:[{text:teks}]});
+ const bodyDasar={system_instruction:{parts:[{text:'Kamu adalah AQIZ ai, asisten suara yang ramah, cerdas, dan solutif. Jawab dalam bahasa pengguna.\n\n'+INSTR_SUARA}]},contents:snapshot};
+ const url='https://generativelanguage.googleapis.com/v1beta/models/'+MODELS[0]+':streamGenerateContent?alt=sse';
+ let res=null;
+ try{
+  const GCS=[{thinkingConfig:{thinkingBudget:0},maxOutputTokens:400},{thinkingConfig:{thinkingLevel:'minimal'},maxOutputTokens:400},{maxOutputTokens:400}];
+  let g0=0;try{const x=+localStorage.getItem('aqiz_gc_idx');if(x>=0&&x<GCS.length)g0=x}catch(_){}
+  for(let n=0;n<GCS.length;n++){
+   const gi=(g0+n)%GCS.length;
+   const body=Object.assign({generationConfig:GCS[gi]},bodyDasar);
+   res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':API_KEY},body:JSON.stringify(body),signal:ctrl.signal});
+   if(res.ok){try{localStorage.setItem('aqiz_gc_idx',String(gi))}catch(_){}break}
+   if(res.status!==400)break;
+  }
+ }catch(_){V.ctrls&&V.ctrls.delete(ctrl);return my!==V.token?'batal':'fallback'}
+ if(!res||!res.ok||!res.body){V.ctrls&&V.ctrls.delete(ctrl);return 'fallback'}
+
+ // UI sama seperti pesan biasa
+ if(!idAktif||!sesiAktif())buatChat();
+ const sesi=sesiAktif();const pesanSesi=sesi.messages||(sesi.messages=[]);riwayat=pesanSesi;
+ const pesanPengguna={role:'user',parts:[{text:teks}],attachments:[]};
+ renderPesanPengguna(pesanPengguna,true);riwayat.push(pesanPengguna);simpanPesanUntuk(sesi,riwayat);
+ const el=gelembung('bot','',false);el.classList.add('answer-enter');
+ sibuk=true;
+ V.speaking=true;
+
+ // Sinkron suara+teks: TTS tiap kalimat diminta PARALEL, diputar berurutan tanpa celah;
+ // teks baru muncul tepat saat suara kalimat itu mulai diputar.
+ const jobs=[];let qTutup=false,adaSuara=false,nKirim=0,idx=0,full='',tampilIdx=0,teksBoleh=false,aktif=0;
+ el.classList.add('thinking');el.innerHTML='<span class="titik"><span></span><span></span><span></span></span>';
+ const segarkan=()=>{
+  const batas=teksBoleh?full.length:tampilIdx;
+  if(batas<=0)return;
+  el.classList.remove('thinking');
+  el.textContent=full.slice(0,batas);ikutiBawahJikaPerlu();
+  const tampil=bersihkanUntukSuara(full.slice(0,batas));
+  setText(teks,tampil.length>260?'…'+tampil.slice(-260):tampil);
+ };
+ const waktuCadangan=setTimeout(()=>{if(my===V.token&&!adaSuara&&!teksBoleh){teksBoleh=true;segarkan()}},7000);
+ const pompa=()=>{
+  for(const j of jobs){
+   if(aktif>=3)break;
+   if(j.req)continue;
+   j.req=true;aktif++;
+   const kal=bersihkanUntukSuara(j.teks);
+   (async()=>{
+    let st='gagal';
+    if(kal){try{st=await streamGeminiKe(kal,my,bf=>{j.bufs.push(bf)})}catch(_){}}
+    j.ok=(st==='ok');j.done=true;aktif--;pompa();
+   })();
+  }
+ };
+ const dorong=akhir=>{
+  let pos=idx;
+  const h=potongKalimatStream(full,idx,akhir,nKirim);
+  for(const k of h.out){pos+=k.length;jobs.push({teks:k,akhirIdx:pos,bufs:[],done:false,ok:false,mulai:false,req:false});nKirim++}
+  idx=h.idx;
+  if(h.out.length){pompa();if(V.state!=='speaking')setState('speaking','Menyiapkan suara…')}
+ };
+ const pemutar=(async()=>{
+  const ac=ctxAudio();V.srcs=V.srcs||[];V.jadwal=0;
+  let lastSrc=null,selesaiSemua=false,resolveFin;
+  const fin=new Promise(r=>{resolveFin=r});
+  const putar=bf=>{
+   const rate=V.rate||1,src=ac.createBufferSource();
+   src.buffer=bf;src.playbackRate.value=rate;src.connect(ac.destination);
+   const t=Math.max(V.jadwal||0,ac.currentTime+0.05);
+   src.start(t);V.jadwal=t+bf.duration/rate;
+   V.srcs.push(src);lastSrc=src;
+   src.onended=()=>{const x=V.srcs.indexOf(src);if(x>=0)V.srcs.splice(x,1);if(src===lastSrc&&selesaiSemua)resolveFin()};
+   return t;
+  };
+  let i=0;
+  while(true){
+   if(my!==V.token)return null;
+   const j=jobs[i];
+   if(!j){if(qTutup)break;await tunggu(25);continue}
+   while(true){
+    if(my!==V.token)return null;
+    if(j.bufs.length){
+     if(!j.mulai&&!j.done&&j.bufs.reduce((t,x)=>t+x.duration,0)<0.22){await tunggu(15);continue}
+     const bf=j.bufs.shift();
+     const t=putar(bf);
+     if(!j.mulai){
+      j.mulai=true;adaSuara=true;
+      const tunda=Math.max(0,(t-ac.currentTime)*1000),batasTeks=j.akhirIdx;
+      setTimeout(()=>{if(my!==V.token)return;tampilIdx=Math.max(tampilIdx,batasTeks);segarkan();if(V.open&&V.state!=='speaking')setState('speaking')},tunda);
+     }
+     continue;
+    }
+    if(j.done)break;
+    await tunggu(15);
+   }
+   if(!j.mulai){tampilIdx=Math.max(tampilIdx,j.akhirIdx);segarkan()}
+   i++;
+  }
+  selesaiSemua=true;
+  if(!lastSrc||V.srcs.indexOf(lastSrc)<0)resolveFin();
+  return fin;
+ })();
+
+ const reader=res.body.getReader(),dec=new TextDecoder();
+ let buf='';
+ const proses=line=>{
+  if(!line.startsWith('data:'))return;
+  const js=line.slice(5).trim();if(!js||js==='[DONE]')return;
+  let o;try{o=JSON.parse(js)}catch(_){return}
+  const t=(o.candidates?.[0]?.content?.parts||[]).map(p=>p.text||'').join('');
+  if(!t)return;
+  full+=t;
+  dorong(false);segarkan();
+ };
+ try{
+  while(true){
+   const {done,value}=await reader.read();
+   if(done)break;
+   if(my!==V.token){try{reader.cancel()}catch(_){}break}
+   buf+=dec.decode(value,{stream:true});
+   let k;while((k=buf.indexOf('\n'))>=0){const line=buf.slice(0,k).trim();buf=buf.slice(k+1);proses(line)}
+  }
+  if(buf.trim())proses(buf.trim());
+ }catch(_){}
+ V.ctrls&&V.ctrls.delete(ctrl);
+
+ const finalTeks=full.replace(/https?:\/\/[^\s<>"'`]+/gi,'').replace(/\n{3,}/g,'\n\n').trim();
+ if(finalTeks){
+  riwayat.push({role:'model',parts:[{text:finalTeks}]});simpanPesanUntuk(sesi,riwayat);
+ }else{
+  const t=riwayat[riwayat.length-1];if(t&&t.role==='user')riwayat.pop();simpanPesanUntuk(sesi,riwayat);
+  el.classList.remove('thinking');el.classList.add('error');el.textContent='Gagal: AI tidak memberikan jawaban.';
+ }
+ sibuk=false;try{ukurInput()}catch(_){}
+ if(my!==V.token){V.speaking=false;return 'batal'}
+ dorong(true);qTutup=true;
+ await pemutar;
+ clearTimeout(waktuCadangan);
+ if(my!==V.token){V.speaking=false;return 'batal'}
+ teksBoleh=true;
+ if(finalTeks){el.classList.remove('thinking');el.innerHTML=format(finalTeks);pastikanAksiJawaban(el);ikutiBawahJikaPerlu()}
+ if(!adaSuara&&finalTeks){
+  V.speaking=false;
+  await new Promise(r=>bicara(finalTeks,r));
+  return 'selesai';
+ }
+ V.speaking=false;
+ return my!==V.token?'batal':'selesai';
+}
+
+async function bicara(teks,selesai){
+ if((V.ttsGagal||0)<2){
+  let ok=false;
+  try{ok=await bicaraGemini(teks,selesai)}catch(_){ok=false}
+  if(ok)return;
+  V.ttsGagal=(V.ttsGagal||0)+1;
+  if(V.ttsGagal===1)tip('Suara Gemini belum bisa dipakai, memakai suara perangkat.');
+ }
+ bicaraBrowser(teks,selesai);
+}
+
+/* ---------- Pengenalan suara (STT): sesi pendek + gabung ucapan + jeda diam ---------- */
+const HP=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent||'');
+function hentikanRec(){
+ if(V.rec){const r=V.rec;V.rec=null;r.onresult=r.onend=r.onerror=null;try{r.abort()}catch(_){}}
+}
+function hapusTimer(){clearTimeout(V.sepi);V.sepi=null}
+function hentikanDengar(){hapusTimer();hentikanRec()}
+function kirimUcapan(){
+ hapusTimer();
+ const t=((V.buf||'')+' '+(V.cur||'')).trim();
+ if(!V.open||!t)return;
+ V.sesi++;hentikanRec();V.buf='';V.cur='';
+ prosesUcapan(t);
+}
+function pasangTimer(ms){
+ if(V.sepi)return;
+ V.sepi=setTimeout(()=>{V.sepi=null;if(V.open&&V.state==='listening'&&!V.muted)kirimUcapan()},ms||650);
+}
+function mulaiDengar(lanjut){
+ if(!V.open||V.muted||V.state==='thinking'||V.speaking)return;
+ if(!SR){setState('idle','Browser tidak mendukung suara');setText('','Pakai Chrome, Edge, atau Safari terbaru untuk bicara ke AQIZ ai.');return}
+ hentikanRec();
+ if(!lanjut){hapusTimer();V.buf='';V.cur=''}
+ const sesi=++V.sesi;
+ let rec;try{rec=new SR()}catch(_){setState('idle','Mikrofon tidak tersedia');return}
+ V.rec=rec;rec.lang='id-ID';rec.interimResults=true;rec.continuous=false;rec.maxAlternatives=1;
+ rec.onresult=e=>{
+  if(sesi!==V.sesi)return;
+  let t='';
+  if(HP){const r=e.results[e.results.length-1];t=r?r[0].transcript:''}
+  else{for(let i=0;i<e.results.length;i++)t+=e.results[i][0].transcript}
+  V.cur=t.trim();
+  hapusTimer();
+  setText(((V.buf||'')+' '+V.cur).trim());
+  const lr=e.results[e.results.length-1];
+  if(lr&&lr.isFinal&&V.cur){V.buf=((V.buf||'')+' '+V.cur).trim();V.cur='';pasangTimer(500)}
+ };
+ rec.onerror=e=>{
+  if(sesi!==V.sesi)return;
+  if(e.error==='not-allowed'||e.error==='service-not-allowed'){V.muted=true;hapusTimer();setState('muted','Izin mikrofon ditolak');setText('','Izinkan akses mikrofon di browser, lalu ketuk ikon mikrofon lagi.')}
+  else if(e.error==='audio-capture'){V.muted=true;hapusTimer();setState('muted','Mikrofon tidak ditemukan')}
+  else if(e.error==='network'){hapusTimer();setState('idle','Koneksi pengenalan suara bermasalah');setText('','Ketuk bola untuk mencoba lagi.')}
+ };
+ rec.onend=()=>{
+  if(sesi!==V.sesi||!V.open)return;
+  V.rec=null;
+  if(V.cur){V.buf=((V.buf||'')+' '+V.cur).trim();V.cur=''}
+  if(V.buf)pasangTimer();
+  if(V.state==='listening'&&!V.muted)setTimeout(()=>{if(V.open&&!V.muted&&V.state==='listening'&&!V.rec)mulaiDengar(true)},60);
+ };
+ try{rec.start();setState('listening')}catch(_){setTimeout(()=>mulaiDengar(lanjut),400)}
+}
+
+/* ---------- Perintah ganti suara lewat prompt ---------- */
+const RE_PERINTAH=/\b(?:pakai|pake|gunakan|ganti|ubah|ganti\s+ke|ubah\s+ke|pindah\s+ke|jadi(?:kan)?)\s+(?:suara|voice)(?:nya)?\s*(?:ke|jadi|menjadi)?\s*(cowok|cowo|pria|laki[\s-]?laki|laki|cewek|cewe|wanita|perempuan)\b|\bsuara\s+(?:ai\s+)?(?:pakai|pake|jadi|ganti)\s+(cowok|cowo|pria|laki[\s-]?laki|laki|cewek|cewe|wanita|perempuan)\b/i;
+function cekPerintahSuara(teks){
+ const t=String(teks||'').trim();
+ if(!t||t.length>70)return null;
+ const m=t.match(RE_PERINTAH);if(!m)return null;
+ const k=(m[1]||m[2]||'').toLowerCase();
+ return /cowok|cowo|pria|laki/.test(k)?'cowok':'cewek';
+}
+function setGender(g,suara){
+ V.gender=g;simpanSuara();renderSettings();
+ if(suara&&V.open){berhentiBicara();hentikanDengar();setState('speaking');setText('','Oke, sekarang pakai suara '+g+'.');bicara('Oke, sekarang aku pakai suara '+g+'.',()=>kembaliDengar())}
+}
+
+/* ---------- Alur percakapan ---------- */
+function kembaliDengar(){
+ if(!V.open)return;
+ if(V.muted){setState('muted');return}
+ setState('listening');
+ setTimeout(()=>{if(V.open&&!V.muted&&!V.speaking&&V.state==='listening')mulaiDengar()},300);
+}
+const kirimAsli=window.kirimPesan;
+async function prosesUcapan(teks){
+ hentikanDengar();
+ const g=cekPerintahSuara(teks);
+ if(g){setText(teks);setGender(g,true);return}
+ setState('thinking');setText(teks);
+ window.AQIZ_SUARA_AKTIF=true;
+ if(!BUTUH_CARI.test(teks)){
+  const h=await jawabStream(teks);
+  if(h!=='fallback'){if(V.open&&h!=='batal')kembaliDengar();return}
+ }
+ const mulai=riwayat.length;
+ let selesai=false;
+ const p=kirimAsli(teks).catch(()=>{}).then(()=>{selesai=true});
+ // tunggu sampai jawaban masuk riwayat (sebelum animasi ketik selesai) agar suara langsung mulai
+ await new Promise(res=>{const iv=setInterval(()=>{
+  const last=riwayat[riwayat.length-1];
+  if(!V.open||selesai||(riwayat.length>mulai&&last&&last.role==='model')){clearInterval(iv);res()}
+ },120)});
+ if(!V.open)return;
+ const last=riwayat[riwayat.length-1];
+ if(riwayat.length>mulai&&last&&last.role==='model'){
+  const jawab=(last.parts||[]).map(x=>x.text||'').join('');
+  const tampil=bersihkanUntukSuara(jawab);
+  setState('speaking');setText(teks,tampil.length>260?tampil.slice(0,260)+'…':tampil);
+  bicara(jawab,()=>kembaliDengar());
+ }else{
+  await p;
+  if(!V.open)return;
+  setState('idle','Gagal mendapat jawaban');setText(teks,'Ketuk bola untuk mencoba bicara lagi.');
+ }
+}
+
+/* ---------- Buka / tutup ---------- */
+async function bukaSuara(){
+ if(V.open)return;
+ ctxAudio();
+ if(!SR&&!synth){tip('Browser ini tidak mendukung fitur suara.');return}
+ V.open=true;V.muted=false;ov.classList.add('open');renderSettings();setText('','');
+ try{if(typeof tutupPanel==='function')tutupPanel()}catch(_){}
+ if(!SR){setState('idle','Pengenalan suara tidak didukung');setText('','Pakai Chrome, Edge, atau Safari terbaru untuk bicara ke AQIZ ai.');return}
+ // minta izin mikrofon lebih dulu agar popup izin muncul sekali saja
+ try{if(navigator.mediaDevices?.getUserMedia){const s=await navigator.mediaDevices.getUserMedia({audio:true});s.getTracks().forEach(t=>t.stop())}}catch(_){
+  V.muted=true;setState('muted','Izin mikrofon dibutuhkan');setText('','Izinkan akses mikrofon di browser, lalu ketuk ikon mikrofon.');return;
+ }
+ if(!V.open)return;
+ // dengan sapaan singkat agar terasa seperti asisten suara
+ setText('','Silakan bicara…');
+ try{fetch('https://generativelanguage.googleapis.com/',{mode:'no-cors'}).catch(()=>{})}catch(_){}
+ kembaliDengar();
+}
+function tutupSuara(){
+ V.open=false;V.sesi++;berhentiBicara();hentikanDengar();
+ ov.classList.remove('open');setState('idle');window.AQIZ_SUARA_AKTIF=false;
+}
+btn.addEventListener('click',bukaSuara);
+$v('vClose').addEventListener('click',tutupSuara);
+$v('vEnd').addEventListener('click',tutupSuara);
+ov.addEventListener('click',e=>{if(e.target===ov)tutupSuara()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&V.open)tutupSuara()});
+$v('vMute').addEventListener('click',()=>{
+ V.muted=!V.muted;
+ if(V.muted){hentikanDengar();V.sesi++;if(V.state==='listening')setState('muted');else setState(V.state==='speaking'?'speaking':'muted',V.state==='speaking'?'Berbicara…':undefined)}
+ else{if(V.state==='muted'||V.state==='idle'){setState('listening');mulaiDengar()}else setState(V.state)}
+});
+$v('vStop').addEventListener('click',()=>{berhentiBicara();if(V.open&&V.state==='speaking')kembaliDengar()});
+$v('vOrb').addEventListener('click',()=>{
+ if(V.state==='speaking'){berhentiBicara();V.muted=false;kembaliDengar();return}
+ if(V.state==='thinking')return;
+ if(V.muted)V.muted=false;
+ setState('listening');mulaiDengar();
+});
+$v('vGender').addEventListener('click',e=>{const b=e.target.closest('button[data-g]');if(!b)return;setGender(b.dataset.g,true)});
+$v('vRate').addEventListener('click',e=>{const b=e.target.closest('button[data-r]');if(!b)return;V.rate=+b.dataset.r;simpanSuara();renderSettings()});
+window.addEventListener('pagehide',()=>{try{synth&&synth.cancel()}catch(_){}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&V.open)tutupSuara()});
+
+/* ---------- Bungkus kirimPesan: perintah suara lewat prompt teks juga ---------- */
+window.kirimPesan=async function(teks){
+ const g=cekPerintahSuara(teks);
+ if(g&&!V.open){
+  setGender(g,false);
+  try{input.value='';ukurInput()}catch(_){}
+  tip('Suara AI diganti ke '+g+'.');
+  return;
+ }
+ return kirimAsli.apply(this,arguments);
+};
+renderSettings();
+})();
+
+</script>
+</body>
+</html>
